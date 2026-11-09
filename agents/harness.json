@@ -1,0 +1,39 @@
+{
+  "name": "gait-engineering",
+  "version": 1,
+  "objective": "Construire une librairie TypeScript de capture comportementale modulaire, fortement typée et très performante.",
+  "sharedContext": [
+    "specs/2026-11-10-gait-behavioral-metrics.md",
+    "agents/README.md"
+  ],
+  "roles": [
+    { "id": "architect", "prompt": "agents/roles/architect.md", "writes": ["architecture decisions", "package boundaries"] },
+    { "id": "typescript-core", "prompt": "agents/roles/typescript-core.md", "writes": ["packages/core/**"] },
+    { "id": "statistics", "prompt": "agents/roles/statistics.md", "writes": ["packages/core/src/statistics/**"] },
+    { "id": "schema-contract", "prompt": "agents/roles/schema-contract.md", "writes": ["packages/schema/**", "schema fixtures"] },
+    { "id": "browser-qa", "prompt": "agents/roles/browser-qa.md", "writes": ["browser-tests/**", "compatibility matrix"] },
+    { "id": "privacy-reviewer", "prompt": "agents/roles/privacy-reviewer.md", "writes": [] },
+    { "id": "react-adapter", "prompt": "agents/roles/react-adapter.md", "writes": ["packages/react/**"] },
+    { "id": "vue-svelte-angular-adapters", "prompt": "agents/roles/framework-adapters.md", "writes": ["packages/vue/**", "packages/svelte/**", "packages/angular/**"] },
+    { "id": "browser-events", "prompt": "agents/roles/browser-events.md", "writes": ["packages/browser/**", "browser compatibility notes"] },
+    { "id": "performance", "prompt": "agents/roles/performance.md", "writes": ["benchmarks/**", "performance notes"] },
+    { "id": "test-engineer", "prompt": "agents/roles/test-engineer.md", "writes": ["tests/**", "packages/*/test/**"] },
+    { "id": "code-reviewer", "prompt": "agents/roles/code-reviewer.md", "writes": [] }
+  ],
+  "gates": [
+    "typecheck",
+    "unit-tests",
+    "schema-contract-tests",
+    "adapter-lifecycle-tests",
+    "performance-benchmarks",
+    "memory-and-listener-leak-tests",
+    "framework-render-count-tests",
+    "esm-cjs-and-ssr-import-tests",
+    "public-api-review",
+    "privacy-and-no-network-review"
+  ],
+  "reviewPolicy": {
+    "blockingFindings": ["public API break", "unbounded allocation", "listener leak", "SSR import failure", "raw key/content export", "network side effect", "missing test for changed behavior"],
+    "requiredEvidence": ["changed files", "commands run", "gate results", "remaining risks"]
+  }
+}
