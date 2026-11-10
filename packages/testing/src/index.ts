@@ -60,7 +60,7 @@ export interface BenchmarkResult {
 export function runSynchronousBenchmark(scenario: BenchmarkScenario, processEvent: (event: NormalizedEvent) => void): BenchmarkResult {
   if (scenario.durationMs <= 0 || scenario.eventsPerSecond <= 0) throw new RangeError('benchmark duration and rate must be > 0');
   const count = Math.ceil((scenario.durationMs / 1000) * scenario.eventsPerSecond);
-  const started = performance.now();
+  const started = Date.now();
   for (let index = 0; index < count; index += 1) {
     processEvent({
       kind: 'pointer-move',
@@ -72,6 +72,6 @@ export function runSynchronousBenchmark(scenario: BenchmarkScenario, processEven
       trusted: true,
     });
   }
-  const elapsedMs = performance.now() - started;
+  const elapsedMs = Date.now() - started;
   return { scenario: scenario.name, eventsProcessed: count, elapsedMs, eventsPerSecond: (count / Math.max(elapsedMs, 0.001)) * 1000 };
 }

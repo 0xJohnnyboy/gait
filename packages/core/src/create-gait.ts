@@ -18,7 +18,7 @@ import { GaitDestroyedError } from './types.ts';
 
 const LIBRARY_VERSION = '0.1.0';
 
-const defaultClock: MonotonicClock = { now: () => globalThis.performance?.now() ?? Date.now() };
+const defaultClock: MonotonicClock = { now: () => Date.now() };
 
 const emptyKeyboard = (): KeyboardSnapshot => ({
   eventsSeen: 0,

@@ -4,6 +4,7 @@
   "type": "module",
   "packageManager": "pnpm@9.15.0",
   "scripts": {
+    "build": "node scripts/build.mjs",
     "typecheck": "pnpm --recursive typecheck",
     "test": "pnpm --recursive test"
   }
