@@ -39,6 +39,9 @@ const emptyPointer = (): PointerSnapshot => ({
   eventsRejected: 0,
   sampleCount: 0,
   distancePx: 0,
+  downCount: 0,
+  upCount: 0,
+  clickCount: 0,
 });
 
 const emptyContext = (): ContextSnapshot => ({
@@ -51,7 +54,7 @@ const emptyContext = (): ContextSnapshot => ({
 });
 
 const emptyTouch = (): TouchSnapshot => ({ eventsSeen: 0, eventsAccepted: 0, eventsRejected: 0, sampleCount: 0, distancePx: 0 });
-const emptyWheel = (): WheelSnapshot => ({ eventsSeen: 0, eventsAccepted: 0, eventsRejected: 0, deltaX: 0, deltaY: 0, deltaZ: 0, pixelCount: 0, lineCount: 0, pageCount: 0 });
+const emptyWheel = (): WheelSnapshot => ({ eventsSeen: 0, eventsAccepted: 0, eventsRejected: 0, deltaX: 0, deltaY: 0, deltaZ: 0, pixelCount: 0, lineCount: 0, pageCount: 0, wheelCount: 0 });
 
 function confidenceFor(keyboard: KeyboardSnapshot, pointer: PointerSnapshot): CaptureConfidence {
   const reasons: CaptureConfidence['degradationReasons'][number][] = [];
@@ -163,6 +166,22 @@ export function createGait(config: GaitConfig = {}): Gait {
       previousPointer = { x: event.x, y: event.y, timestamp: event.timestamp, pointerId: event.pointerId };
       return;
     }
+    if (event.kind === 'pointer-button') {
+      if (config.signals?.pointer === false) return;
+      pointer = { ...pointer, eventsSeen: pointer.eventsSeen + 1 };
+      if (!event.trusted) {
+        pointer = { ...pointer, eventsRejected: pointer.eventsRejected + 1 };
+        return;
+      }
+      pointer = {
+        ...pointer,
+        eventsAccepted: pointer.eventsAccepted + 1,
+        downCount: pointer.downCount + (event.action === 'down' ? 1 : 0),
+        upCount: pointer.upCount + (event.action === 'up' ? 1 : 0),
+        clickCount: pointer.clickCount + (event.action === 'click' ? 1 : 0),
+      };
+      return;
+    }
     if (event.kind === 'touch-move') {
       if (config.signals?.touch === false) return;
       touch = { ...touch, eventsSeen: touch.eventsSeen + 1 };
@@ -189,6 +208,7 @@ export function createGait(config: GaitConfig = {}): Gait {
         pixelCount: wheel.pixelCount + (event.deltaMode === 0 ? 1 : 0),
         lineCount: wheel.lineCount + (event.deltaMode === 1 ? 1 : 0),
         pageCount: wheel.pageCount + (event.deltaMode === 2 ? 1 : 0),
+        wheelCount: wheel.wheelCount + 1,
       };
       return;
     }

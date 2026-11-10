@@ -8,9 +8,9 @@ const EMPTY_SNAPSHOT: GaitSnapshot = {
   capturedAt: { durationMs: 0, startedAtMonotonicMs: 0 },
   signals: {
     keyboard: { eventsSeen: 0, eventsAccepted: 0, eventsRejected: 0, unmatchedKeyCount: 0 },
-    pointer: { eventsSeen: 0, eventsAccepted: 0, eventsRejected: 0, sampleCount: 0, distancePx: 0 },
+    pointer: { eventsSeen: 0, eventsAccepted: 0, eventsRejected: 0, sampleCount: 0, distancePx: 0, downCount: 0, upCount: 0, clickCount: 0 },
     touch: { eventsSeen: 0, eventsAccepted: 0, eventsRejected: 0, sampleCount: 0, distancePx: 0 },
-    wheel: { eventsSeen: 0, eventsAccepted: 0, eventsRejected: 0, deltaX: 0, deltaY: 0, deltaZ: 0, pixelCount: 0, lineCount: 0, pageCount: 0 },
+    wheel: { eventsSeen: 0, eventsAccepted: 0, eventsRejected: 0, deltaX: 0, deltaY: 0, deltaZ: 0, pixelCount: 0, lineCount: 0, pageCount: 0, wheelCount: 0 },
     context: { eventsSeen: 0, eventsAccepted: 0, eventsRejected: 0, focusMs: 0, blurCount: 0, visibilityGapMs: 0 },
   },
   quality: { confidence: { score: 0, level: 'low', degradationReasons: ['insufficient_sample'] } },

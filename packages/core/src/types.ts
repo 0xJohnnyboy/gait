@@ -46,6 +46,12 @@ export type NormalizedEvent =
       readonly trusted: boolean;
     }
   | {
+      readonly kind: 'pointer-button';
+      readonly timestamp: number;
+      readonly action: 'down' | 'up' | 'click';
+      readonly trusted: boolean;
+    }
+  | {
       readonly kind: 'touch-move';
       readonly timestamp: number;
       readonly pointerId: number;
@@ -101,6 +107,9 @@ export interface PointerSnapshot {
   readonly eventsRejected: number;
   readonly sampleCount: number;
   readonly distancePx: number;
+  readonly downCount: number;
+  readonly upCount: number;
+  readonly clickCount: number;
   readonly speedPxPerMs?: MetricSummary;
   readonly accelerationPxPerMs2?: MetricSummary;
 }
@@ -123,6 +132,7 @@ export interface WheelSnapshot {
   readonly pixelCount: number;
   readonly lineCount: number;
   readonly pageCount: number;
+  readonly wheelCount: number;
 }
 
 export interface ContextSnapshot {

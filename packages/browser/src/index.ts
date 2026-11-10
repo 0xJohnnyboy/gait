@@ -74,6 +74,12 @@ export function createBrowserEventSource(options: BrowserEventSourceOptions = {}
           }
         }
       };
+      const emitPointerButton = (action: 'down' | 'up') => (event: PointerEvent): void => {
+        emit?.({ kind: 'pointer-button', action, timestamp: timestamp(event), trusted: trusted(event) });
+      };
+      const emitClick = (event: MouseEvent): void => {
+        emit?.({ kind: 'pointer-button', action: 'click', timestamp: timestamp(event), trusted: trusted(event) });
+      };
       const emitWheel = (event: WheelEvent): void => {
         const mode: 0 | 1 | 2 = event.deltaMode === 1 || event.deltaMode === 2 ? event.deltaMode : 0;
         emit?.({ kind: 'wheel', timestamp: timestamp(event), deltaX: event.deltaX, deltaY: event.deltaY, deltaZ: event.deltaZ, deltaMode: mode, trusted: trusted(event) });
@@ -85,6 +91,9 @@ export function createBrowserEventSource(options: BrowserEventSourceOptions = {}
       target.addEventListener('keydown', emitKeyDown, { signal, passive: true });
       target.addEventListener('keyup', emitKeyUp, { signal, passive: true });
       target.addEventListener('pointermove', emitPointer, { signal, passive: true });
+      target.addEventListener('pointerdown', emitPointerButton('down'), { signal, passive: true });
+      target.addEventListener('pointerup', emitPointerButton('up'), { signal, passive: true });
+      target.addEventListener('click', emitClick, { signal, passive: true });
       target.addEventListener('focus', (event) => emitContext('focus', event), { signal, passive: true });
       target.addEventListener('blur', (event) => emitContext('blur', event), { signal, passive: true });
       target.addEventListener('pagehide', (event) => emitContext('pagehide', event), { signal, passive: true });
