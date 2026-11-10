@@ -1,0 +1,12 @@
+---
+import Layout from './Layout.astro';
+const { title, description } = Astro.props.frontmatter ?? {};
+---
+<Layout title={`${title ?? 'Docs'} — gait`} description={description}>
+  <main class="mx-auto min-h-screen max-w-3xl px-5 py-10 sm:px-8">
+    <a href="/gait/docs/" class="text-sm text-[#52e5d0]">← Docs</a>
+    <article class="docs-content mt-20">
+      <slot />
+    </article>
+  </main>
+</Layout>
