@@ -104,3 +104,20 @@ test('flush publishes one stable snapshot to subscribers', () => {
   assert.equal(first, second);
   assert.equal(snapshots.length, 1);
 });
+
+test('keeps touch and wheel signals separate from pointer metrics', () => {
+  const source = new TestSource();
+  const gait = createGait({ clock: new TestClock(), eventSource: source });
+  gait.start();
+  source.send({ kind: 'touch-move', pointerId: 2, x: 10, y: 20, timestamp: 1, trusted: true });
+  source.send({ kind: 'wheel', deltaX: 1, deltaY: 4, deltaZ: 0, deltaMode: 0, timestamp: 2, trusted: true });
+  source.send({ kind: 'wheel', deltaX: 0, deltaY: 1, deltaZ: 0, deltaMode: 1, timestamp: 3, trusted: true });
+
+  const snapshot = gait.snapshot();
+  assert.equal(snapshot.signals.pointer.eventsSeen, 0);
+  assert.equal(snapshot.signals.touch.sampleCount, 1);
+  assert.equal(snapshot.signals.wheel.eventsAccepted, 2);
+  assert.equal(snapshot.signals.wheel.deltaY, 5);
+  assert.equal(snapshot.signals.wheel.pixelCount, 1);
+  assert.equal(snapshot.signals.wheel.lineCount, 1);
+});

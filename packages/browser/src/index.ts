@@ -13,7 +13,8 @@ function trusted(event: Event): boolean {
 
 function timestamp(event: Event): number {
   const value = event.timeStamp;
-  return Number.isFinite(value) && value >= 0 ? value : performance.now();
+  const now = performance.now();
+  return Number.isFinite(value) && value >= 0 && value <= now + 1000 ? value : now;
 }
 
 export function createBrowserClock(): MonotonicClock {
