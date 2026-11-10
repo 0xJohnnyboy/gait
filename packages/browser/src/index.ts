@@ -1,4 +1,5 @@
-import type { EventSource, MonotonicClock, NormalizedEvent } from '@gait/core';
+import { createGait } from '@gait/core';
+import type { EventSource, Gait, GaitConfig, MonotonicClock, NormalizedEvent } from '@gait/core';
 
 export interface BrowserEventSourceOptions {
   readonly target?: Window;
@@ -6,6 +7,8 @@ export interface BrowserEventSourceOptions {
   readonly includeTouch?: boolean;
   readonly includeWheel?: boolean;
 }
+
+export type BrowserGaitConfig = GaitConfig & BrowserEventSourceOptions;
 
 function trusted(event: Event): boolean {
   return event.isTrusted !== false;
@@ -19,6 +22,21 @@ function timestamp(event: Event): number {
 
 export function createBrowserClock(): MonotonicClock {
   return { now: () => performance.now() };
+}
+
+export function createBrowserGait(config: BrowserGaitConfig = {}): Gait {
+  const { target, document: documentTarget, includeTouch, includeWheel, ...coreConfig } = config;
+  const browserOptions: BrowserEventSourceOptions = {
+    ...(target === undefined ? {} : { target }),
+    ...(documentTarget === undefined ? {} : { document: documentTarget }),
+    ...(includeTouch === undefined ? {} : { includeTouch }),
+    ...(includeWheel === undefined ? {} : { includeWheel }),
+  };
+  return createGait({
+    ...coreConfig,
+    clock: coreConfig.clock ?? createBrowserClock(),
+    eventSource: coreConfig.eventSource ?? createBrowserEventSource(browserOptions),
+  });
 }
 
 export function createBrowserEventSource(options: BrowserEventSourceOptions = {}): EventSource {
