@@ -1,12 +1,56 @@
 ---
 import Layout from './Layout.astro';
 const { title, description } = Astro.props.frontmatter ?? {};
+const pathname = Astro.url.pathname;
+const links = [
+  { label: 'Overview', href: '/gait/docs/' },
+  { label: 'Quickstart', href: '/gait/docs/quickstart/' },
+  { label: 'API & snapshots', href: '/gait/docs/api/' },
+  { label: 'Architecture', href: '/gait/docs/architecture/' },
+];
+const platformLinks = [
+  { label: 'Browser', href: '/gait/docs/browser/' },
+  { label: 'React', href: '/gait/docs/react/' },
+  { label: 'Vue', href: '/gait/docs/vue/' },
+  { label: 'Svelte', href: '/gait/docs/svelte/' },
+  { label: 'Angular', href: '/gait/docs/angular/' },
+];
+const guidanceLinks = [
+  { label: 'Performance', href: '/gait/docs/performance/' },
+  { label: 'Privacy & trust', href: '/gait/docs/privacy/' },
+];
 ---
 <Layout title={`${title ?? 'Docs'} — gait`} description={description}>
-  <main class="mx-auto min-h-screen max-w-3xl px-5 py-10 sm:px-8">
-    <a href="/gait/docs/" class="text-sm text-[#52e5d0]">← Docs</a>
-    <article class="docs-content mt-20">
-      <slot />
-    </article>
-  </main>
+  <div class="docs-shell">
+    <header class="docs-header">
+      <a class="docs-brand" href="/gait/" aria-label="gait home"><span class="docs-brand-mark">g</span><span>gait</span><span class="docs-brand-divider">/</span><span class="docs-brand-section">docs</span></a>
+      <nav class="docs-header-nav" aria-label="Global navigation">
+        <a href="/gait/">Home</a>
+        <a href="https://github.com/0xJohnnyboy/gait">GitHub ↗</a>
+      </nav>
+    </header>
+    <div class="docs-layout">
+      <aside class="docs-sidebar" aria-label="Documentation navigation">
+        <div class="docs-sidebar-title">Documentation</div>
+        <nav>
+          <div class="docs-nav-group">
+            {links.map((link) => <a class:list={{ 'is-active': pathname === link.href }} href={link.href}>{link.label}</a>)}
+          </div>
+          <div class="docs-nav-label">Integrations</div>
+          <div class="docs-nav-group">
+            {platformLinks.map((link) => <a class:list={{ 'is-active': pathname === link.href }} href={link.href}>{link.label}</a>)}
+          </div>
+          <div class="docs-nav-label">Guidance</div>
+          <div class="docs-nav-group">
+            {guidanceLinks.map((link) => <a class:list={{ 'is-active': pathname === link.href }} href={link.href}>{link.label}</a>)}
+          </div>
+        </nav>
+        <div class="docs-sidebar-footer"><span class="docs-status-dot"></span> v0.1 · local-first</div>
+      </aside>
+      <main class="docs-main">
+        <article class="docs-content"><slot /></article>
+        <footer class="docs-footer"><a href="/gait/">← Back to gait</a><span>Built for local behavioral signals.</span></footer>
+      </main>
+    </div>
+  </div>
 </Layout>

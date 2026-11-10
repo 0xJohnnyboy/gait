@@ -1,18 +1,24 @@
 ---
-import Layout from '../../layouts/Layout.astro';
+import DocsLayout from '../../layouts/DocsLayout.astro';
 ---
-<Layout title="Docs — gait">
-  <main class="mx-auto min-h-screen max-w-5xl px-5 py-10 sm:px-8">
-    <a href="/gait/" class="text-sm text-[#52e5d0]">← Back to gait</a>
-    <div class="mt-20 max-w-3xl"><div class="eyebrow mb-5">documentation</div><h1 class="display text-5xl font-semibold text-white">Build with behavioral signals.</h1><p class="mt-6 text-lg leading-8 text-slate-400">The practical guide to capturing, aggregating and consuming gait snapshots.</p></div>
-    <div class="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-      <a class="glass rounded-3xl p-6 transition hover:-translate-y-1" href="/gait/docs/quickstart/"><div class="text-xs uppercase tracking-widest text-[#52e5d0]">01 · start here</div><h2 class="mt-8 text-xl font-semibold text-white">Quickstart</h2><p class="mt-2 text-sm leading-6 text-slate-400">Create a browser collector and inspect your first local snapshot.</p></a>
-      <a class="glass rounded-3xl p-6 transition hover:-translate-y-1" href="/gait/docs/api/"><div class="text-xs uppercase tracking-widest text-[#9b8cff]">02 · contract</div><h2 class="mt-8 text-xl font-semibold text-white">API & snapshots</h2><p class="mt-2 text-sm leading-6 text-slate-400">Lifecycle, configuration and the versioned JSON output.</p></a>
-      <a class="glass rounded-3xl p-6 transition hover:-translate-y-1" href="/gait/docs/architecture/"><div class="text-xs uppercase tracking-widest text-[#9b8cff]">03 · under the hood</div><h2 class="mt-8 text-xl font-semibold text-white">Architecture</h2><p class="mt-2 text-sm leading-6 text-slate-400">Core, browser source, adapters and the performance boundary.</p></a>
-      <a class="glass rounded-3xl p-6 transition hover:-translate-y-1" href="/gait/docs/browser/"><div class="text-xs uppercase tracking-widest text-[#f6c76b]">04 · platform</div><h2 class="mt-8 text-xl font-semibold text-white">Browser events</h2><p class="mt-2 text-sm leading-6 text-slate-400">Pointer, keyboard, visibility, clocks and unsupported capabilities.</p></a>
-      <a class="glass rounded-3xl p-6 transition hover:-translate-y-1" href="/gait/docs/performance/"><div class="text-xs uppercase tracking-widest text-[#f6c76b]">05 · production</div><h2 class="mt-8 text-xl font-semibold text-white">Performance</h2><p class="mt-2 text-sm leading-6 text-slate-400">Sampling, flush cadence, memory bounds and framework renders.</p></a>
-      <a class="glass rounded-3xl p-6 transition hover:-translate-y-1" href="/gait/docs/privacy/"><div class="text-xs uppercase tracking-widest text-[#fb7185]">06 · boundaries</div><h2 class="mt-8 text-xl font-semibold text-white">Privacy & trust</h2><p class="mt-2 text-sm leading-6 text-slate-400">What gait captures, what it never claims and how to interpret confidence.</p></a>
-    </div>
-    <div class="mt-10"><div class="eyebrow mb-4">framework adapters</div><div class="flex flex-wrap gap-3"><a class="rounded-full border border-white/10 px-4 py-2 text-sm text-slate-300 hover:border-[#52e5d0]/40 hover:text-white" href="/gait/docs/react/">React</a><a class="rounded-full border border-white/10 px-4 py-2 text-sm text-slate-300 hover:border-[#52e5d0]/40 hover:text-white" href="/gait/docs/vue/">Vue</a><a class="rounded-full border border-white/10 px-4 py-2 text-sm text-slate-300 hover:border-[#52e5d0]/40 hover:text-white" href="/gait/docs/svelte/">Svelte</a><a class="rounded-full border border-white/10 px-4 py-2 text-sm text-slate-300 hover:border-[#52e5d0]/40 hover:text-white" href="/gait/docs/angular/">Angular</a></div></div>
-  </main>
-</Layout>
+<DocsLayout title="Documentation" description="The practical guide to capturing, aggregating and consuming gait snapshots.">
+  <div class="eyebrow">documentation</div>
+  <h1>Build with behavioral signals.</h1>
+  <p>Capture locally, aggregate efficiently and expose versioned snapshots to the application that owns the next step.</p>
+  <h2>Start here</h2>
+  <div class="docs-overview-grid">
+    <a class="docs-overview-card" href="/gait/docs/quickstart/"><strong>Quickstart</strong><span>Create a browser collector and inspect your first local snapshot.</span></a>
+    <a class="docs-overview-card" href="/gait/docs/api/"><strong>API & snapshots</strong><span>Learn the lifecycle, configuration and JSON contract.</span></a>
+    <a class="docs-overview-card" href="/gait/docs/architecture/"><strong>Architecture</strong><span>Understand the Core, browser source and adapter boundaries.</span></a>
+    <a class="docs-overview-card" href="/gait/docs/browser/"><strong>Browser adapter</strong><span>Connect DOM events while keeping SSR safe.</span></a>
+  </div>
+  <h2>Integrations and guidance</h2>
+  <div class="docs-overview-grid">
+    <a class="docs-overview-card" href="/gait/docs/react/"><strong>React</strong><span>External-store subscriptions and lifecycle.</span></a>
+    <a class="docs-overview-card" href="/gait/docs/vue/"><strong>Vue</strong><span>Shallow refs and mounted cleanup.</span></a>
+    <a class="docs-overview-card" href="/gait/docs/svelte/"><strong>Svelte</strong><span>Readable stores scoped to subscribers.</span></a>
+    <a class="docs-overview-card" href="/gait/docs/angular/"><strong>Angular</strong><span>Readonly signals and render-safe startup.</span></a>
+    <a class="docs-overview-card" href="/gait/docs/performance/"><strong>Performance</strong><span>Flush cadence, bounds and render budgets.</span></a>
+    <a class="docs-overview-card" href="/gait/docs/privacy/"><strong>Privacy & trust</strong><span>What gait captures and what it never claims.</span></a>
+  </div>
+</DocsLayout>
