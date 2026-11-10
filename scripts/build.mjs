@@ -18,6 +18,7 @@ function runTsc(packageName, module, outDir) {
     noImplicitReturns: true,
     verbatimModuleSyntax: module === 'ESNext',
     isolatedModules: true,
+    skipLibCheck: true,
     declaration: module === 'ESNext',
     declarationMap: false,
     rootDir: join(packageRoot, 'src'),
@@ -25,7 +26,7 @@ function runTsc(packageName, module, outDir) {
     allowImportingTsExtensions: false,
     rewriteRelativeImportExtensions: true,
     ignoreDeprecations: '6.0',
-    lib: packageName === 'browser' ? ['ES2022', 'DOM'] : ['ES2022'],
+    lib: ['core', 'schema', 'testing'].includes(packageName) ? ['ES2022'] : ['ES2022', 'DOM'],
     paths: packageName === 'core' ? undefined : { '@gait/core': ['packages/core/dist/index.d.ts'] },
     baseUrl: root,
   };

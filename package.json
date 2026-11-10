@@ -5,6 +5,7 @@
   "packageManager": "pnpm@9.15.0",
   "scripts": {
     "build": "node scripts/build.mjs",
+    "build:site": "pnpm --dir site build",
     "typecheck": "pnpm --recursive typecheck",
     "test": "pnpm --recursive test"
   }
