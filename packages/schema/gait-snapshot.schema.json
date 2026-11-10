@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gait.dev/schema/gait-snapshot-1.0.json",
+  "title": "gait snapshot",
+  "type": "object",
+  "required": ["schemaVersion", "libraryVersion", "capturedAt", "signals", "quality"],
+  "properties": {
+    "schemaVersion": { "const": "1.0" },
+    "libraryVersion": { "type": "string", "minLength": 1 },
+    "capturedAt": {
+      "type": "object",
+      "required": ["durationMs", "startedAtMonotonicMs"],
+      "properties": {
+        "durationMs": { "type": "number", "minimum": 0 },
+        "startedAtMonotonicMs": { "type": "number", "minimum": 0 }
+      },
+      "additionalProperties": false
+    },
+    "signals": { "type": "object", "required": ["keyboard", "pointer", "context"] },
+    "quality": { "type": "object", "required": ["confidence"] }
+  },
+  "additionalProperties": false
+}

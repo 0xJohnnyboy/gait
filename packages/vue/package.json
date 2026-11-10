@@ -1,0 +1,11 @@
+{
+  "name": "@gait/vue",
+  "version": "0.1.0",
+  "type": "module",
+  "sideEffects": false,
+  "files": ["dist"],
+  "peerDependencies": { "vue": ">=3" },
+  "dependencies": { "@gait/core": "workspace:*" },
+  "exports": { ".": { "types": "./dist/index.d.ts", "import": "./dist/index.js", "require": "./dist/index.cjs" } },
+  "scripts": { "typecheck": "tsc -p tsconfig.json" }
+}
