@@ -1,0 +1,15 @@
+---
+title: SSR and hydration
+description: Keep imports safe and start browser capture only on the client.
+draft: false
+---
+
+Core and framework adapter imports are SSR-safe. Browser globals are not read at module scope. `createBrowserGait()` requires a browser unless `target` and `document` are injected.
+
+Create and start the browser source from a client-only lifecycle boundary. Never construct `window`, `document`, `navigator` or `performance` during server rendering.
+
+:::caution
+Importing `@gait/browser` is safe. Calling `createBrowserGait()` during SSR without injected browser targets throws `GAIT_BROWSER_UNAVAILABLE`.
+:::
+
+For tests and server-rendered components, inject a fake `EventSource` and monotonic `clock` instead of emulating browser globals.

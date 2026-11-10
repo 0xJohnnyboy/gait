@@ -1,0 +1,18 @@
+---
+title: Touch and wheel metrics
+description: Touch movement and normalized wheel activity.
+draft: false
+---
+
+Touch movement is kept separate from mouse and pen movement when the browser reports `pointerType: "touch"`. The touch snapshot contains technical counters, sample count and accumulated distance.
+
+Wheel snapshots preserve the native delta values and count pixels, lines and pages by `deltaMode`. The library does not infer a user intent from scroll direction or magnitude.
+
+```ts
+const { touch, wheel } = gait.flush().signals;
+console.log({
+  touchDistance: touch.distancePx,
+  wheelEvents: wheel.wheelCount,
+  pixelDeltas: wheel.pixelCount,
+});
+```

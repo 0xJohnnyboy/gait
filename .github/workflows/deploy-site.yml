@@ -23,7 +23,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: pages
+  group: ${{ github.event_name == 'push' && 'pages-production' || format('pages-pr-{0}', github.event.pull_request.number) }}
   cancel-in-progress: true
 
 jobs:

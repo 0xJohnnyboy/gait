@@ -1,0 +1,24 @@
+---
+title: Architecture
+description: Core, browser source and framework adapters with thin boundaries.
+draft: false
+---
+
+```text
+DOM events ──> @gait/browser ── normalized events ──> @gait/core
+                                                        │
+                                  explicit flush ───────┘
+                                                        ▼
+                                      versioned snapshot
+```
+
+`@gait/core` is pure TypeScript. It knows only about normalized events, an injectable clock and an injectable event source. `@gait/browser` owns DOM listeners, event normalization, coalesced pointer events and browser capability detection.
+
+Framework packages only connect lifecycle and subscriptions:
+
+- React uses `useSyncExternalStore`.
+- Vue uses shallow refs and mounted/unmounted hooks.
+- Svelte uses a readable store.
+- Angular uses a readonly signal and destroy scope.
+
+No adapter recalculates metrics or stores raw events. There is no global singleton or dependency-injection container.

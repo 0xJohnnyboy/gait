@@ -1,0 +1,23 @@
+---
+title: Vue adapter
+description: Expose snapshots through shallow refs and Vue lifecycle hooks.
+draft: false
+---
+
+```bash
+pnpm add @gait/core @gait/vue @gait/browser
+```
+
+```vue
+<script setup lang="ts">
+import { useGait } from '@gait/vue';
+
+const { snapshot } = useGait(clientGaitConfig);
+</script>
+
+<template>
+  <output>{{ snapshot?.signals.pointer.speedPxPerMs?.mean ?? '—' }}</output>
+</template>
+```
+
+The composable creates and starts on `onMounted`, then unsubscribes and destroys on `onUnmounted`. It uses shallow refs because a snapshot is replaced on publication; raw events are never made reactive.

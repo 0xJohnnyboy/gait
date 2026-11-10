@@ -1,0 +1,26 @@
+---
+title: Configuration
+description: Configure signals, bounded windows and injectable ports.
+draft: false
+---
+
+`GaitConfig` is intentionally small. Use `signals` to disable a family, `clock` and `eventSource` for deterministic tests, and `onSnapshot` only for application-owned snapshot handling.
+
+```ts
+import { createGait } from '@gait/core';
+
+const gait = createGait({
+  signals: { keyboard: true, pointer: true, touch: false, wheel: false, context: true },
+  sample: { pointerHz: 60, flushMs: 250 },
+  window: { durationMs: 30_000, maxEvents: 10_000 },
+  clock: controlledClock,
+  eventSource: syntheticSource,
+  onSnapshot: (snapshot) => applicationBoundary(snapshot),
+});
+```
+
+Disabled signal families keep their snapshot shape and report zero technical counters. A missing metric summary means there were no usable observations; it is not the same as a measured zero.
+
+## Ports
+
+`EventSource` exposes `start(emit)`, `stop()` and `dispose()`. `MonotonicClock` exposes `now()`. These ports keep Core independent from the DOM, frameworks, network and storage.

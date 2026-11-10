@@ -1,0 +1,20 @@
+---
+title: Svelte adapter
+description: Use a readable store with subscription-scoped cleanup.
+draft: false
+---
+
+```bash
+pnpm add @gait/core @gait/svelte @gait/browser
+```
+
+```svelte
+<script lang="ts">
+import { createGaitStore } from '@gait/svelte';
+const snapshot = createGaitStore(clientGaitConfig);
+</script>
+
+<output>{$snapshot?.signals.pointer.speedPxPerMs?.mean ?? '—'}</output>
+```
+
+The store creates a gait instance when the first subscriber appears and destroys it when the last subscriber leaves. It publishes snapshots, not native events.

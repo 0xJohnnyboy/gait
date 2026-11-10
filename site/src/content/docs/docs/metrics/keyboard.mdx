@@ -1,0 +1,29 @@
+---
+title: Keyboard metrics
+description: Dwell time, flight time and keyboard quality counters.
+draft: false
+---
+
+Keyboard processing pairs a temporary internal key identifier between `key-down` and `key-up`. The identifier and key content never appear in the public snapshot.
+
+## Dwell time
+
+For a key pair with down timestamp `t_d` and up timestamp `t_u`:
+
+```text
+dwellTimeMs = t_u - t_d
+```
+
+Only finite, monotonic and trusted pairs are accepted. The snapshot exposes summary statistics such as `mean`, `p50`, `p90`, `p95`, `stdDev`, `min`, `max`, `sum` and `n` when observations exist.
+
+## Flight time
+
+For a completed key-up at `u_i` and the next key-down at `d_(i+1)`:
+
+```text
+flightTimeMs = d_(i+1) - u_i
+```
+
+Overlapping sequences are counted in `flightTimeMs.overlapCount` and are not represented as negative durations.
+
+`eventsSeen`, `eventsAccepted`, `eventsRejected` and `unmatchedKeyCount` are technical diagnostics that help interpret the summaries. They are not identity features by themselves.

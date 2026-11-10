@@ -1,0 +1,24 @@
+---
+title: Browser adapter
+description: Connect normalized DOM events to gait without leaking browser concerns into Core.
+draft: false
+---
+
+```bash
+pnpm add @gait/core @gait/browser
+```
+
+`@gait/browser` listens to keyboard, pointer, focus, visibility and optional wheel events. It normalizes them for `@gait/core` and owns the monotonic browser clock.
+
+```ts
+import { createBrowserGait } from '@gait/browser';
+
+const gait = createBrowserGait({
+  includeWheel: true,
+  signals: { keyboard: true, pointer: true, touch: true, wheel: true, context: true },
+});
+```
+
+`target` and `document` can be injected for an iframe or a browser test. `includeTouch` is retained for the optional legacy touch listener; touch pointer events are normalized when `pointerType` is `touch`.
+
+The adapter never sends or stores data. Call `destroy()` to abort all listeners and release references.
