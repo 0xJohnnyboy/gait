@@ -82,6 +82,8 @@ export function createGait(config: GaitConfig = {}): Gait {
   let context = emptyContext();
   let previousPointer: { x: number; y: number; timestamp: number; pointerId: number } | undefined;
   let previousSpeed: { value: number; timestamp: number } | undefined;
+  let focusStartedAt: number | undefined;
+  let hiddenStartedAt: number | undefined;
   let lastKeyUp: number | undefined;
   let startedAt = clock.now();
   let lastTimestamp = startedAt;
@@ -191,8 +193,26 @@ export function createGait(config: GaitConfig = {}): Gait {
       return;
     }
     if (event.kind === 'context') {
+      if (config.signals?.context === false) return;
       context = { ...context, eventsSeen: context.eventsSeen + 1, eventsAccepted: context.eventsAccepted + 1 };
-      if (event.event === 'blur') context = { ...context, blurCount: context.blurCount + 1 };
+      if (event.event === 'focus') focusStartedAt ??= event.timestamp;
+      if (event.event === 'blur') {
+        if (focusStartedAt !== undefined && event.timestamp >= focusStartedAt) {
+          context = { ...context, focusMs: context.focusMs + event.timestamp - focusStartedAt };
+        }
+        focusStartedAt = undefined;
+        context = { ...context, blurCount: context.blurCount + 1 };
+      }
+      if (event.event === 'hidden') {
+        hiddenStartedAt = event.timestamp;
+        activeKeys.clear();
+        previousPointer = undefined;
+        previousSpeed = undefined;
+      }
+      if (event.event === 'visible' && hiddenStartedAt !== undefined && event.timestamp >= hiddenStartedAt) {
+        context = { ...context, visibilityGapMs: context.visibilityGapMs + event.timestamp - hiddenStartedAt };
+        hiddenStartedAt = undefined;
+      }
       return;
     }
   };
@@ -255,6 +275,8 @@ export function createGait(config: GaitConfig = {}): Gait {
       context = emptyContext();
       previousPointer = undefined;
       previousSpeed = undefined;
+      focusStartedAt = undefined;
+      hiddenStartedAt = undefined;
       lastKeyUp = undefined;
       flightOverlapCount = 0;
       startedAt = clock.now();

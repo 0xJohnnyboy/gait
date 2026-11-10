@@ -22,8 +22,9 @@ export function createBrowserClock(): MonotonicClock {
 }
 
 export function createBrowserEventSource(options: BrowserEventSourceOptions = {}): EventSource {
-  const target = options.target ?? window;
-  const documentTarget = options.document ?? document;
+  const target = options.target ?? globalThis.window;
+  const documentTarget = options.document ?? globalThis.document;
+  if (target === undefined || documentTarget === undefined) throw new Error('GAIT_BROWSER_UNAVAILABLE');
   let emit: ((event: NormalizedEvent) => void) | undefined;
   let controller: AbortController | undefined;
 
