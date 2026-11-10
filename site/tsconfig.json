@@ -1,0 +1,13 @@
+{
+  "extends": "astro/tsconfigs/strict",
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "jsxImportSource": "react",
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"],
+      "@gait/browser": ["../packages/browser/src/index.ts"],
+      "@gait/core": ["../packages/core/src/index.ts"]
+    }
+  }
+}

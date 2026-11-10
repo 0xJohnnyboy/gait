@@ -1,0 +1,6 @@
+---
+import Layout from '../../layouts/Layout.astro';
+---
+<Layout title="Quickstart — gait">
+  <main class="mx-auto min-h-screen max-w-3xl px-5 py-10 sm:px-8"><a href="/gait/docs/" class="text-sm text-[#52e5d0]">← Docs</a><article class="mt-20"><div class="eyebrow">quickstart</div><h1 class="display mt-5 text-5xl font-semibold text-white">Your first local snapshot.</h1><p class="mt-6 text-lg leading-8 text-slate-400">gait observes browser events, computes aggregates and leaves transport to your application.</p><pre class="mt-10 overflow-x-auto rounded-2xl border border-white/10 bg-black/30 p-5 text-sm leading-7 text-[#b8fff5]"><code>{`import { createBrowserGait } from '@gait/browser';\n\nconst gait = createBrowserGait();\ngait.start();\n\ngait.subscribe((snapshot) => {\n  console.log(snapshot.signals.pointer);\n});\n\n// Stop and release every listener when your session ends.\ngait.destroy();`}</code></pre><div class="mt-10 rounded-2xl border border-[#52e5d0]/20 bg-[#52e5d0]/[.06] p-5 text-sm leading-6 text-[#c9fff8]">The Core does not send data, persist data or identify users. Your application owns any later transport and interpretation.</div></article></main>
+</Layout>

@@ -1,0 +1,25 @@
+@import "tailwindcss";
+
+:root {
+  color-scheme: dark;
+  --ink: #f4f7fb;
+  --muted: #94a3b8;
+  --line: rgba(148, 163, 184, 0.16);
+  --panel: rgba(15, 23, 42, 0.72);
+  --cyan: #52e5d0;
+  --violet: #9b8cff;
+}
+
+@theme {
+  --font-sans: "DM Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+}
+
+html { background: #070b14; scroll-behavior: smooth; }
+body { min-width: 320px; margin: 0; color: var(--ink); background: radial-gradient(circle at 16% 0%, rgba(82,229,208,.12), transparent 34rem), radial-gradient(circle at 90% 9%, rgba(155,140,255,.16), transparent 32rem), #070b14; font-family: var(--font-sans); }
+::selection { background: rgba(82,229,208,.3); color: white; }
+.display { font-family: var(--font-display); letter-spacing: -.055em; }
+.grid-glow { background-image: linear-gradient(rgba(148,163,184,.06) 1px, transparent 1px), linear-gradient(90deg, rgba(148,163,184,.06) 1px, transparent 1px); background-size: 48px 48px; }
+.glass { background: var(--panel); border: 1px solid var(--line); box-shadow: 0 24px 100px rgba(0,0,0,.22); backdrop-filter: blur(18px); }
+.eyebrow { color: var(--cyan); font-size: .72rem; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .001ms !important; transition-duration: .001ms !important; } }
