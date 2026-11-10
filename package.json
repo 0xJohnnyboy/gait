@@ -1,0 +1,10 @@
+{
+  "name": "gait",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@9.15.0",
+  "scripts": {
+    "typecheck": "pnpm --recursive typecheck",
+    "test": "pnpm --recursive test"
+  }
+}

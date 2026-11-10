@@ -1,0 +1,232 @@
+import { RunningStats } from './statistics.ts';
+import type {
+  CaptureConfidence,
+  ContextSnapshot,
+  EventSource,
+  Gait,
+  GaitConfig,
+  GaitSnapshot,
+  KeyboardSnapshot,
+  MonotonicClock,
+  NormalizedEvent,
+  PointerSnapshot,
+  SnapshotListener,
+} from './types.ts';
+import { GaitDestroyedError } from './types.ts';
+
+const LIBRARY_VERSION = '0.1.0';
+
+const defaultClock: MonotonicClock = { now: () => globalThis.performance?.now() ?? Date.now() };
+
+const emptyKeyboard = (): KeyboardSnapshot => ({
+  eventsSeen: 0,
+  eventsAccepted: 0,
+  eventsRejected: 0,
+  unmatchedKeyCount: 0,
+});
+
+const emptyPointer = (): PointerSnapshot => ({
+  eventsSeen: 0,
+  eventsAccepted: 0,
+  eventsRejected: 0,
+  sampleCount: 0,
+  distancePx: 0,
+});
+
+const emptyContext = (): ContextSnapshot => ({
+  eventsSeen: 0,
+  eventsAccepted: 0,
+  eventsRejected: 0,
+  focusMs: 0,
+  blurCount: 0,
+  visibilityGapMs: 0,
+});
+
+function confidenceFor(keyboard: KeyboardSnapshot, pointer: PointerSnapshot): CaptureConfidence {
+  const reasons: CaptureConfidence['degradationReasons'][number][] = [];
+  const samples = (keyboard.dwellTimeMs?.n ?? 0) + pointer.sampleCount;
+  if (samples < 10) reasons.push('insufficient_sample');
+  if (keyboard.eventsRejected + pointer.eventsRejected > 0) reasons.push('event_gap');
+  const score = Math.max(0, Math.min(1, 1 - reasons.length * 0.15));
+  return {
+    score,
+    level: score >= 0.8 ? 'high' : score >= 0.5 ? 'medium' : 'low',
+    degradationReasons: reasons,
+  };
+}
+
+export function createGait(config: GaitConfig = {}): Gait {
+  const clock = config.clock ?? defaultClock;
+  const source = config.eventSource;
+  const listeners = new Set<SnapshotListener>();
+  const activeKeys = new Map<string, number>();
+  const dwellStats = new RunningStats();
+  const flightStats = new RunningStats();
+  const speedStats = new RunningStats();
+  let keyboard = emptyKeyboard();
+  let pointer = emptyPointer();
+  let context = emptyContext();
+  let previousPointer: { x: number; y: number; timestamp: number; pointerId: number } | undefined;
+  let lastKeyUp: number | undefined;
+  let startedAt = clock.now();
+  let lastTimestamp = startedAt;
+  let running = false;
+  let destroyed = false;
+  let cachedSnapshot: GaitSnapshot | undefined;
+  let flightOverlapCount = 0;
+
+  const handleEvent = (event: NormalizedEvent): void => {
+    if (destroyed || !Number.isFinite(event.timestamp) || event.timestamp < lastTimestamp) return;
+    lastTimestamp = event.timestamp;
+    cachedSnapshot = undefined;
+    if (event.kind === 'key-down') {
+      keyboard = { ...keyboard, eventsSeen: keyboard.eventsSeen + 1 };
+      if (!event.trusted || event.repeat || activeKeys.has(event.keyId)) {
+        keyboard = { ...keyboard, eventsRejected: keyboard.eventsRejected + 1 };
+        return;
+      }
+      activeKeys.set(event.keyId, event.timestamp);
+      keyboard = { ...keyboard, eventsAccepted: keyboard.eventsAccepted + 1 };
+      return;
+    }
+    if (event.kind === 'key-up') {
+      keyboard = { ...keyboard, eventsSeen: keyboard.eventsSeen + 1 };
+      const downAt = activeKeys.get(event.keyId);
+      if (!event.trusted || downAt === undefined) {
+        keyboard = {
+          ...keyboard,
+          eventsRejected: keyboard.eventsRejected + 1,
+          unmatchedKeyCount: keyboard.unmatchedKeyCount + 1,
+        };
+        return;
+      }
+      activeKeys.delete(event.keyId);
+      const dwell = event.timestamp - downAt;
+      if (dwell < 0) return;
+      dwellStats.add(dwell);
+      if (lastKeyUp !== undefined) {
+        const flight = downAt - lastKeyUp;
+        if (flight < 0) flightOverlapCount += 1;
+        else flightStats.add(flight);
+      }
+      lastKeyUp = event.timestamp;
+      keyboard = { ...keyboard, eventsAccepted: keyboard.eventsAccepted + 1 };
+      return;
+    }
+    if (event.kind === 'pointer-move') {
+      pointer = { ...pointer, eventsSeen: pointer.eventsSeen + 1 };
+      if (!event.trusted || !Number.isFinite(event.x) || !Number.isFinite(event.y)) {
+        pointer = { ...pointer, eventsRejected: pointer.eventsRejected + 1 };
+        return;
+      }
+      if (previousPointer !== undefined && previousPointer.pointerId === event.pointerId) {
+        const dt = event.timestamp - previousPointer.timestamp;
+        if (dt > 0) {
+          const distance = Math.hypot(event.x - previousPointer.x, event.y - previousPointer.y);
+          pointer = {
+            ...pointer,
+            distancePx: pointer.distancePx + distance,
+            sampleCount: pointer.sampleCount + 1,
+            eventsAccepted: pointer.eventsAccepted + 1,
+          };
+          speedStats.add(distance / dt);
+        }
+      } else {
+        pointer = { ...pointer, eventsAccepted: pointer.eventsAccepted + 1 };
+      }
+      previousPointer = { x: event.x, y: event.y, timestamp: event.timestamp, pointerId: event.pointerId };
+      return;
+    }
+    if (event.kind === 'context') {
+      context = { ...context, eventsSeen: context.eventsSeen + 1, eventsAccepted: context.eventsAccepted + 1 };
+      if (event.event === 'blur') context = { ...context, blurCount: context.blurCount + 1 };
+      return;
+    }
+  };
+
+  const buildSnapshot = (): GaitSnapshot => {
+    const dwellTimeMs = dwellStats.summary();
+    const flightTime = flightStats.summary();
+    const speedPxPerMs = speedStats.summary();
+    const keyboardSnapshot: KeyboardSnapshot = {
+      ...keyboard,
+      ...(dwellTimeMs === undefined ? {} : { dwellTimeMs }),
+      ...(flightTime === undefined && flightOverlapCount === 0
+        ? {}
+        : { flightTimeMs: { ...(flightTime ?? { n: 0 }), overlapCount: flightOverlapCount } }),
+    };
+    const pointerSnapshot: PointerSnapshot = {
+      ...pointer,
+      ...(speedPxPerMs === undefined ? {} : { speedPxPerMs }),
+    };
+    return {
+      schemaVersion: '1.0',
+      libraryVersion: LIBRARY_VERSION,
+      capturedAt: { durationMs: Math.max(0, clock.now() - startedAt), startedAtMonotonicMs: startedAt },
+      signals: { keyboard: keyboardSnapshot, pointer: pointerSnapshot, context },
+      quality: { confidence: confidenceFor(keyboardSnapshot, pointerSnapshot) },
+    };
+  };
+
+  const ensureAlive = (): void => {
+    if (destroyed) throw new GaitDestroyedError();
+  };
+
+  return {
+    start(): void {
+      ensureAlive();
+      if (running) return;
+      running = true;
+      source?.start(handleEvent);
+    },
+    stop(): void {
+      if (destroyed || !running) return;
+      running = false;
+      source?.stop();
+      activeKeys.clear();
+      previousPointer = undefined;
+    },
+    reset(): void {
+      ensureAlive();
+      activeKeys.clear();
+      dwellStats.reset();
+      flightStats.reset();
+      speedStats.reset();
+      keyboard = emptyKeyboard();
+      pointer = emptyPointer();
+      context = emptyContext();
+      previousPointer = undefined;
+      lastKeyUp = undefined;
+      flightOverlapCount = 0;
+      startedAt = clock.now();
+      lastTimestamp = startedAt;
+      cachedSnapshot = undefined;
+    },
+    snapshot(): GaitSnapshot {
+      ensureAlive();
+      cachedSnapshot ??= buildSnapshot();
+      return cachedSnapshot;
+    },
+    flush(): GaitSnapshot {
+      ensureAlive();
+      const nextSnapshot = buildSnapshot();
+      cachedSnapshot = nextSnapshot;
+      for (const listener of [...listeners]) listener(nextSnapshot);
+      config.onSnapshot?.(nextSnapshot);
+      return nextSnapshot;
+    },
+    subscribe(listener: SnapshotListener): () => void {
+      ensureAlive();
+      listeners.add(listener);
+      return () => listeners.delete(listener);
+    },
+    destroy(): void {
+      if (destroyed) return;
+      if (running) source?.stop();
+      source?.dispose();
+      listeners.clear();
+      activeKeys.clear();
+      destroyed = true;
+    },
+  };
+}
