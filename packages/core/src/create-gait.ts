@@ -18,7 +18,13 @@ import { GaitDestroyedError } from './types.ts';
 
 const LIBRARY_VERSION = '0.1.0';
 
-const defaultClock: MonotonicClock = { now: () => Date.now() };
+let lastDefaultClockValue = 0;
+const defaultClock: MonotonicClock = {
+  now: () => {
+    lastDefaultClockValue = Math.max(lastDefaultClockValue, Date.now());
+    return lastDefaultClockValue;
+  },
+};
 
 const emptyKeyboard = (): KeyboardSnapshot => ({
   eventsSeen: 0,
@@ -68,12 +74,14 @@ export function createGait(config: GaitConfig = {}): Gait {
   const dwellStats = new RunningStats();
   const flightStats = new RunningStats();
   const speedStats = new RunningStats();
+  const accelerationStats = new RunningStats();
   let keyboard = emptyKeyboard();
   let pointer = emptyPointer();
   let touch = emptyTouch();
   let wheel = emptyWheel();
   let context = emptyContext();
   let previousPointer: { x: number; y: number; timestamp: number; pointerId: number } | undefined;
+  let previousSpeed: { value: number; timestamp: number } | undefined;
   let lastKeyUp: number | undefined;
   let startedAt = clock.now();
   let lastTimestamp = startedAt;
@@ -87,6 +95,7 @@ export function createGait(config: GaitConfig = {}): Gait {
     lastTimestamp = event.timestamp;
     cachedSnapshot = undefined;
     if (event.kind === 'key-down') {
+      if (config.signals?.keyboard === false) return;
       keyboard = { ...keyboard, eventsSeen: keyboard.eventsSeen + 1 };
       if (!event.trusted || event.repeat || activeKeys.has(event.keyId)) {
         keyboard = { ...keyboard, eventsRejected: keyboard.eventsRejected + 1 };
@@ -97,6 +106,7 @@ export function createGait(config: GaitConfig = {}): Gait {
       return;
     }
     if (event.kind === 'key-up') {
+      if (config.signals?.keyboard === false) return;
       keyboard = { ...keyboard, eventsSeen: keyboard.eventsSeen + 1 };
       const downAt = activeKeys.get(event.keyId);
       if (!event.trusted || downAt === undefined) {
@@ -121,6 +131,7 @@ export function createGait(config: GaitConfig = {}): Gait {
       return;
     }
     if (event.kind === 'pointer-move') {
+      if (config.signals?.pointer === false) return;
       pointer = { ...pointer, eventsSeen: pointer.eventsSeen + 1 };
       if (!event.trusted || !Number.isFinite(event.x) || !Number.isFinite(event.y)) {
         pointer = { ...pointer, eventsRejected: pointer.eventsRejected + 1 };
@@ -136,7 +147,13 @@ export function createGait(config: GaitConfig = {}): Gait {
             sampleCount: pointer.sampleCount + 1,
             eventsAccepted: pointer.eventsAccepted + 1,
           };
-          speedStats.add(distance / dt);
+          const speed = distance / dt;
+          speedStats.add(speed);
+          if (previousSpeed !== undefined) {
+            const accelerationDt = event.timestamp - previousSpeed.timestamp;
+            if (accelerationDt > 0) accelerationStats.add((speed - previousSpeed.value) / accelerationDt);
+          }
+          previousSpeed = { value: speed, timestamp: event.timestamp };
         }
       } else {
         pointer = { ...pointer, eventsAccepted: pointer.eventsAccepted + 1 };
@@ -145,6 +162,7 @@ export function createGait(config: GaitConfig = {}): Gait {
       return;
     }
     if (event.kind === 'touch-move') {
+      if (config.signals?.touch === false) return;
       touch = { ...touch, eventsSeen: touch.eventsSeen + 1 };
       if (!event.trusted || !Number.isFinite(event.x) || !Number.isFinite(event.y)) {
         touch = { ...touch, eventsRejected: touch.eventsRejected + 1 };
@@ -154,6 +172,7 @@ export function createGait(config: GaitConfig = {}): Gait {
       return;
     }
     if (event.kind === 'wheel') {
+      if (config.signals?.wheel === false) return;
       wheel = { ...wheel, eventsSeen: wheel.eventsSeen + 1 };
       if (!event.trusted || ![event.deltaX, event.deltaY, event.deltaZ].every(Number.isFinite)) {
         wheel = { ...wheel, eventsRejected: wheel.eventsRejected + 1 };
@@ -182,6 +201,7 @@ export function createGait(config: GaitConfig = {}): Gait {
     const dwellTimeMs = dwellStats.summary();
     const flightTime = flightStats.summary();
     const speedPxPerMs = speedStats.summary();
+    const accelerationPxPerMs2 = accelerationStats.summary();
     const keyboardSnapshot: KeyboardSnapshot = {
       ...keyboard,
       ...(dwellTimeMs === undefined ? {} : { dwellTimeMs }),
@@ -192,6 +212,7 @@ export function createGait(config: GaitConfig = {}): Gait {
     const pointerSnapshot: PointerSnapshot = {
       ...pointer,
       ...(speedPxPerMs === undefined ? {} : { speedPxPerMs }),
+      ...(accelerationPxPerMs2 === undefined ? {} : { accelerationPxPerMs2 }),
     };
     return {
       schemaVersion: '1.0',
@@ -226,12 +247,14 @@ export function createGait(config: GaitConfig = {}): Gait {
       dwellStats.reset();
       flightStats.reset();
       speedStats.reset();
+      accelerationStats.reset();
       keyboard = emptyKeyboard();
       pointer = emptyPointer();
       touch = emptyTouch();
       wheel = emptyWheel();
       context = emptyContext();
       previousPointer = undefined;
+      previousSpeed = undefined;
       lastKeyUp = undefined;
       flightOverlapCount = 0;
       startedAt = clock.now();

@@ -79,6 +79,9 @@ export interface MetricSummary {
   readonly min?: number;
   readonly max?: number;
   readonly mean?: number;
+  readonly p50?: number;
+  readonly p90?: number;
+  readonly p95?: number;
   readonly stdDev?: number;
   readonly sum?: number;
 }
@@ -99,6 +102,7 @@ export interface PointerSnapshot {
   readonly sampleCount: number;
   readonly distancePx: number;
   readonly speedPxPerMs?: MetricSummary;
+  readonly accelerationPxPerMs2?: MetricSummary;
 }
 
 export interface TouchSnapshot {
