@@ -8,5 +8,6 @@
   "peerDependencies": { "svelte": ">=4" },
   "dependencies": { "@gait/core": "workspace:*" },
   "exports": { ".": { "types": "./dist/index.d.ts", "import": "./dist/index.js", "require": "./dist/index.cjs" } },
-  "scripts": { "typecheck": "tsc -p tsconfig.json" }
+  "scripts": { "typecheck": "tsc -p tsconfig.json" },
+  "devDependencies": { "typescript": "^5.7.0" }
 }
