@@ -1,4 +1,4 @@
-import type { GaitSnapshot } from '@gait/core';
+import type { GaitSnapshot } from '@gaitjs/core';
 
 export const GAIT_SCHEMA_VERSION = '1.0' as const;
 

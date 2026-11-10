@@ -1,12 +1,12 @@
 {
-  "name": "@gait/browser",
-  "version": "0.1.0",
+  "name": "@gaitjs/browser",
+  "version": "0.0.1",
   "license": "AGPL-3.0-only",
   "type": "module",
   "sideEffects": false,
   "files": ["dist"],
   "dependencies": {
-    "@gait/core": "workspace:*"
+    "@gaitjs/core": "workspace:*"
   },
   "exports": {
     ".": {

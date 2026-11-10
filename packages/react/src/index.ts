@@ -1,6 +1,6 @@
 import { useEffect, useRef, useSyncExternalStore } from 'react';
-import { createGait } from '@gait/core';
-import type { Gait, GaitConfig, GaitSnapshot } from '@gait/core';
+import { createGait } from '@gaitjs/core';
+import type { Gait, GaitConfig, GaitSnapshot } from '@gaitjs/core';
 
 const EMPTY_SNAPSHOT: GaitSnapshot = {
   schemaVersion: '1.0',

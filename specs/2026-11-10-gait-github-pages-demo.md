@@ -25,7 +25,7 @@ GitHub Pages impose un site statique pré-rendu. La démo ne peut donc dépendre
 - Montrer en temps réel les métriques calculées par `gait` sur les interactions de la page.
 - Rendre visible et compréhensible la valeur de `gait` sans présenter ses métriques comme une preuve d’identité ou de triche.
 - Afficher explicitement que la démo fonctionne localement et n’envoie pas les événements capturés.
-- Réutiliser les vrais packages `@gait/core` et `@gait/browser`, sans réimplémenter les formules dans le site.
+- Réutiliser les vrais packages `@gaitjs/core` et `@gaitjs/browser`, sans réimplémenter les formules dans le site.
 - Ajouter une documentation Markdown dans le repo, navigable depuis le site.
 - Déployer automatiquement le dossier `site/` sur GitHub Pages depuis GitHub Actions.
 - Garantir une bonne performance initiale : HTML statique rapide, JavaScript interactif limité à l’île de démo.
@@ -54,8 +54,8 @@ GitHub Pages impose un site statique pré-rendu. La démo ne peut donc dépendre
   - section intégration TypeScript ;
   - footer avec liens GitHub, npm/documentation et statut local-only.
 - Île React `LiveMetricsDemo` hydratée côté client.
-- Capture directe des événements clavier, pointeur, touch, wheel, focus et visibilité par `@gait/browser`.
-- Agrégation via `@gait/core` et affichage de :
+- Capture directe des événements clavier, pointeur, touch, wheel, focus et visibilité par `@gaitjs/browser`.
+- Agrégation via `@gaitjs/core` et affichage de :
   - dwell time moyen, médian et p95 ;
   - flight time moyen, médian et p95 ;
   - vitesse et accélération du pointeur ;
@@ -119,7 +119,7 @@ site/
 └── tests/
 ```
 
-Astro rend la structure et le contenu statiques. React est réservé au widget qui doit écouter le navigateur et publier des snapshots périodiques. Les composants shadcn/ui servent aux primitives visuelles ; ils ne doivent pas devenir une dépendance de `@gait/core`.
+Astro rend la structure et le contenu statiques. React est réservé au widget qui doit écouter le navigateur et publier des snapshots périodiques. Les composants shadcn/ui servent aux primitives visuelles ; ils ne doivent pas devenir une dépendance de `@gaitjs/core`.
 
 ### 7.2 Landing page
 
@@ -186,7 +186,7 @@ Le workflow doit être déclenché sur push vers `main` lorsqu’un fichier du s
 1. Créer `site/` Astro avec Tailwind, React et shadcn/ui ; configurer alias, base path et build statique.
 2. Ajouter le layout global, thème, navigation, typography, tokens et primitives UI nécessaires.
 3. Implémenter la landing page statique et ses sections produit.
-4. Implémenter `LiveMetricsDemo` avec `@gait/browser` et `@gait/core`, snapshot initial, cadence de publication et cleanup.
+4. Implémenter `LiveMetricsDemo` avec `@gaitjs/browser` et `@gaitjs/core`, snapshot initial, cadence de publication et cleanup.
 5. Ajouter cartes, sparklines/histogrammes, jauge de confiance et états unsupported/error.
 6. Migrer/écrire la documentation Markdown et les pages docs Astro.
 7. Ajouter tests de composants et tests navigateur : SSR, hydration, capture locale, absence de réseau, render count et responsive smoke tests.
@@ -212,7 +212,7 @@ Le workflow doit être déclenché sur push vers `main` lorsqu’un fichier du s
 
 - **AC-1 :** le site est situé dans le repository sous `site/`, se build en statique Astro et fonctionne sous le sous-chemin GitHub Pages du repository.
 - **AC-2 :** la landing page contient hero, CTA, démo, signaux, architecture, exemple de code, privacy/performance et footer cohérents visuellement.
-- **AC-3 :** le widget capture directement les événements côté client et affiche des métriques réelles calculées par `@gait/core`/`@gait/browser`, sans formule dupliquée dans le site.
+- **AC-3 :** le widget capture directement les événements côté client et affiche des métriques réelles calculées par `@gaitjs/core`/`@gaitjs/browser`, sans formule dupliquée dans le site.
 - **AC-4 :** le widget affiche au minimum dwell time, flight time, vitesse/accélération pointeur, événements acceptés/rejetés et confiance avec `degradationReasons`.
 - **AC-5 :** la mention locale est visible dans le widget et aucun événement ou snapshot n’est envoyé, stocké ou transmis par le site.
 - **AC-6 :** aucun contenu de touche, code de touche, coordonnée brute ou trajectoire ne figure dans l’UI ou dans un export de démo.

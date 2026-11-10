@@ -1,4 +1,4 @@
-import type { EventSource, MonotonicClock, NormalizedEvent } from '@gait/core';
+import type { EventSource, MonotonicClock, NormalizedEvent } from '@gaitjs/core';
 
 export class ControlledClock implements MonotonicClock {
   private current = 0;

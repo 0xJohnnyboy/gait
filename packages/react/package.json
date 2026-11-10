@@ -1,12 +1,12 @@
 {
-  "name": "@gait/react",
-  "version": "0.1.0",
+  "name": "@gaitjs/react",
+  "version": "0.0.1",
   "license": "AGPL-3.0-only",
   "type": "module",
   "sideEffects": false,
   "files": ["dist"],
   "peerDependencies": { "react": ">=18" },
-  "dependencies": { "@gait/core": "workspace:*" },
+  "dependencies": { "@gaitjs/core": "workspace:*" },
   "exports": { ".": { "types": "./dist/index.d.ts", "import": "./dist/index.js", "require": "./dist/index.cjs" } },
   "scripts": { "typecheck": "tsc -p tsconfig.json" },
   "devDependencies": { "typescript": "^5.7.0" }

@@ -7,7 +7,7 @@ draft: false
 import { Tabs, TabItem } from '@astrojs/starlight/components';
 
 ```bash
-pnpm add @gait/core @gait/react @gait/browser
+pnpm add @gaitjs/core @gaitjs/react @gaitjs/browser
 ```
 
 The adapter uses `useSyncExternalStore`. It creates the Core instance once, publishes only snapshots and destroys it on unmount.
@@ -21,8 +21,8 @@ Use a client-only factory to build a `GaitConfig` with `createBrowserEventSource
   <TabItem label="React">
 
 ```tsx
-import type { GaitConfig } from '@gait/core';
-import { useGait, useGaitSnapshot } from '@gait/react';
+import type { GaitConfig } from '@gaitjs/core';
+import { useGait, useGaitSnapshot } from '@gaitjs/react';
 
 export function Metrics({ config }: { config: GaitConfig }) {
   const gait = useGait({ ...config, autoStart: true });

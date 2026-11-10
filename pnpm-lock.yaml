@@ -13,7 +13,7 @@ importers:
       '@angular/core':
         specifier: '>=16'
         version: 22.2.5(rxjs@7.8.2)
-      '@gait/core':
+      '@gaitjs/core':
         specifier: workspace:*
         version: link:../core
     devDependencies:
@@ -23,7 +23,7 @@ importers:
 
   packages/browser:
     dependencies:
-      '@gait/core':
+      '@gaitjs/core':
         specifier: workspace:*
         version: link:../core
     devDependencies:
@@ -39,7 +39,7 @@ importers:
 
   packages/react:
     dependencies:
-      '@gait/core':
+      '@gaitjs/core':
         specifier: workspace:*
         version: link:../core
       react:
@@ -51,6 +51,10 @@ importers:
         version: 5.9.3
 
   packages/schema:
+    dependencies:
+      '@gaitjs/core':
+        specifier: workspace:*
+        version: link:../core
     devDependencies:
       typescript:
         specifier: ^5.7.0
@@ -58,7 +62,7 @@ importers:
 
   packages/svelte:
     dependencies:
-      '@gait/core':
+      '@gaitjs/core':
         specifier: workspace:*
         version: link:../core
       svelte:
@@ -71,7 +75,7 @@ importers:
 
   packages/testing:
     dependencies:
-      '@gait/core':
+      '@gaitjs/core':
         specifier: workspace:*
         version: link:../core
     devDependencies:
@@ -81,7 +85,7 @@ importers:
 
   packages/vue:
     dependencies:
-      '@gait/core':
+      '@gaitjs/core':
         specifier: workspace:*
         version: link:../core
       vue:
@@ -100,10 +104,10 @@ importers:
       '@astrojs/starlight':
         specifier: ^0.36.0
         version: 0.36.3(astro@5.18.2)
-      '@gait/browser':
+      '@gaitjs/browser':
         specifier: workspace:*
         version: link:../packages/browser
-      '@gait/core':
+      '@gaitjs/core':
         specifier: workspace:*
         version: link:../packages/core
       astro:

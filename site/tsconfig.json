@@ -6,8 +6,8 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"],
-      "@gait/browser": ["../packages/browser/src/index.ts"],
-      "@gait/core": ["../packages/core/src/index.ts"]
+      "@gaitjs/browser": ["../packages/browser/src/index.ts"],
+      "@gaitjs/core": ["../packages/core/src/index.ts"]
     }
   }
 }

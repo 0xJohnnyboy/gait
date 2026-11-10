@@ -1,10 +1,13 @@
 {
-  "name": "@gait/schema",
-  "version": "0.1.0",
+  "name": "@gaitjs/schema",
+  "version": "0.0.1",
   "license": "AGPL-3.0-only",
   "type": "module",
   "sideEffects": false,
   "files": ["dist", "gait-snapshot.schema.json"],
+  "dependencies": {
+    "@gaitjs/core": "workspace:*"
+  },
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",

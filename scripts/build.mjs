@@ -27,7 +27,7 @@ function runTsc(packageName, module, outDir) {
     rewriteRelativeImportExtensions: true,
     ignoreDeprecations: '6.0',
     lib: ['core', 'schema', 'testing'].includes(packageName) ? ['ES2022'] : ['ES2022', 'DOM'],
-    paths: packageName === 'core' ? undefined : { '@gait/core': ['packages/core/dist/index.d.ts'] },
+    paths: packageName === 'core' ? undefined : { '@gaitjs/core': ['packages/core/dist/index.d.ts'] },
     baseUrl: root,
   };
   const config = {

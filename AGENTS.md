@@ -8,8 +8,8 @@ La spécification de référence est [specs/2026-11-10-gait-behavioral-metrics.m
 
 ## Règles d’architecture
 
-- `@gait/core` reste pur TypeScript : aucun DOM, framework, réseau, stockage ou effet à l’import.
-- `@gait/browser` fournit les listeners DOM, la normalisation, l’horloge monotone et le scheduler.
+- `@gaitjs/core` reste pur TypeScript : aucun DOM, framework, réseau, stockage ou effet à l’import.
+- `@gaitjs/browser` fournit les listeners DOM, la normalisation, l’horloge monotone et le scheduler.
 - Les adaptateurs React, Vue, Svelte et Angular ne font que gérer lifecycle, subscription et exposition des snapshots.
 - Les ports restent petits et injectables : source d’événements, horloge, scheduler.
 - Pas d’hexagonale cérémonielle, de singleton global, de conteneur DI ou d’abstraction sans bénéfice mesurable.
