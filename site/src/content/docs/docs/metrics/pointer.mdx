@@ -1,0 +1,22 @@
+---
+title: Pointer metrics
+description: Cursor distance, speed and acceleration summaries.
+draft: false
+---
+
+For consecutive samples `(x_(i-1), y_(i-1), t_(i-1))` and `(x_i, y_i, t_i)`:
+
+```text
+d_i = sqrt((x_i - x_(i-1))^2 + (y_i - y_(i-1))^2)
+v_i = d_i / (t_i - t_(i-1))
+```
+
+Acceleration is the finite difference between consecutive speeds:
+
+```text
+a_i = (v_i - v_(i-1)) / (t_i - t_(i-1))
+```
+
+The snapshot exposes `distancePx`, `sampleCount`, button counters and summaries for `speedPxPerMs` and `accelerationPxPerMs2`. Samples with invalid coordinates, untrusted events or non-positive time deltas are rejected.
+
+The browser adapter uses `getCoalescedEvents()` when available and falls back to the original pointer event.

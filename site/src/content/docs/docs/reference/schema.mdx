@@ -1,0 +1,39 @@
+---
+title: Snapshot schema
+description: Versioned JSON output for application-owned consumers.
+draft: false
+---
+
+```json
+{
+  "schemaVersion": "1.0",
+  "libraryVersion": "0.1.0",
+  "capturedAt": { "durationMs": 12000, "startedAtMonotonicMs": 4200 },
+  "signals": {
+    "keyboard": {
+      "eventsSeen": 120,
+      "eventsAccepted": 118,
+      "eventsRejected": 2,
+      "unmatchedKeyCount": 1,
+      "dwellTimeMs": { "n": 58, "mean": 84.2, "p50": 79.5, "p95": 142.1 },
+      "flightTimeMs": { "n": 54, "mean": 96.4, "overlapCount": 3 }
+    },
+    "pointer": {
+      "eventsSeen": 840,
+      "eventsAccepted": 836,
+      "eventsRejected": 4,
+      "sampleCount": 620,
+      "distancePx": 18342.7,
+      "downCount": 12,
+      "upCount": 12,
+      "clickCount": 9
+    },
+    "touch": { "eventsSeen": 0, "eventsAccepted": 0, "eventsRejected": 0, "sampleCount": 0, "distancePx": 0 },
+    "wheel": { "eventsSeen": 8, "eventsAccepted": 8, "eventsRejected": 0, "deltaX": 0, "deltaY": 640, "deltaZ": 0, "pixelCount": 8, "lineCount": 0, "pageCount": 0, "wheelCount": 8 },
+    "context": { "eventsSeen": 4, "eventsAccepted": 4, "eventsRejected": 0, "focusMs": 11300, "blurCount": 1, "visibilityGapMs": 700 }
+  },
+  "quality": { "confidence": { "score": 0.85, "level": "high", "degradationReasons": ["event_gap"] } }
+}
+```
+
+Technical counters remain in their signal section. `quality.confidence` describes capture quality, not identity or cheating.

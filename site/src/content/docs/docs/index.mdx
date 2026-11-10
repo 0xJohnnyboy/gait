@@ -1,0 +1,25 @@
+---
+title: Documentation
+description: Capture and aggregate local behavioral signals with gait.
+draft: false
+---
+
+# Behavioral signals, computed locally.
+
+## A focused pipeline
+
+gait captures browser events, aggregates them into bounded statistics and exposes versioned snapshots. Your application decides whether to display, store or send those snapshots.
+
+<div class="sl-card-grid" data-card-grid>
+  <a class="sl-card" href="/gait/docs/quickstart/"><strong>Start here</strong><span>Install gait and create your first local snapshot.</span></a>
+  <a class="sl-card" href="/gait/docs/guides/configuration/"><strong>Use gait</strong><span>Configure signals, lifecycle and snapshot publication.</span></a>
+  <a class="sl-card" href="/gait/docs/adapters/browser/"><strong>Integrate</strong><span>Connect the browser adapter or your framework of choice.</span></a>
+  <a class="sl-card" href="/gait/docs/metrics/keyboard/"><strong>Understand metrics</strong><span>Learn how dwell time, flight time and pointer speed are computed.</span></a>
+</div>
+
+## What gait does not do
+
+- It does not send data, persist data or identify users.
+- It does not decide whether a user is cheating or whether two profiles match.
+- It does not expose raw keyboard content in a snapshot.
+- It is a correlation signal among other application-owned signals.

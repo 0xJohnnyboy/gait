@@ -1,0 +1,101 @@
+---
+title: Quickstart
+description: Create your first local gait snapshot.
+draft: false
+sidebar:
+  order: 1
+---
+
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
+Install the Core and the adapter for the environment you are integrating:
+
+```bash
+pnpm add @gait/core @gait/browser
+```
+
+The browser factory installs no listeners until `start()` is called. Snapshots are published when you explicitly call `flush()`.
+
+```ts
+import { createBrowserGait } from '@gait/browser';
+
+const gait = createBrowserGait({
+  signals: { keyboard: true, pointer: true, touch: true, wheel: true, context: true },
+});
+const unsubscribe = gait.subscribe((snapshot) => {
+  console.log(snapshot.signals.keyboard.dwellTimeMs?.mean);
+});
+
+gait.start();
+const timer = window.setInterval(() => gait.flush(), 250);
+
+// At the end of the session or component lifetime:
+window.clearInterval(timer);
+unsubscribe();
+gait.destroy();
+```
+
+<Tabs syncKey="framework">
+  <TabItem label="Browser">
+
+```ts
+import { createBrowserGait } from '@gait/browser';
+const gait = createBrowserGait();
+gait.start();
+const snapshot = gait.flush();
+gait.destroy();
+```
+
+  </TabItem>
+  <TabItem label="React">
+
+```tsx
+import { useGait, useGaitSnapshot } from '@gait/react';
+
+export function Metrics({ config }: { config: GaitConfig }) {
+  const gait = useGait({ ...config, autoStart: true });
+  const snapshot = useGaitSnapshot(gait);
+  return <output>{snapshot.signals.pointer.speedPxPerMs?.mean ?? '—'}</output>;
+}
+```
+
+  </TabItem>
+  <TabItem label="Vue">
+
+```vue
+<script setup lang="ts">
+import { useGait } from '@gait/vue';
+const { snapshot } = useGait(clientGaitConfig);
+</script>
+
+<output>{{ snapshot?.signals.pointer.speedPxPerMs?.mean ?? '—' }}</output>
+```
+
+  </TabItem>
+  <TabItem label="Svelte">
+
+```svelte
+<script lang="ts">
+import { createGaitStore } from '@gait/svelte';
+const snapshot = createGaitStore(clientGaitConfig);
+</script>
+
+<output>{$snapshot?.signals.pointer.speedPxPerMs?.mean ?? '—'}</output>
+```
+
+  </TabItem>
+  <TabItem label="Angular">
+
+```ts
+import { GaitAdapter } from '@gait/angular';
+
+readonly gait = new GaitAdapter();
+constructor() { this.gait.start(clientGaitConfig, this.destroyRef); }
+```
+
+  </TabItem>
+</Tabs>
+
+:::tip
+The Core does not send, store or match anything. Hand a snapshot to your own application boundary only when you explicitly choose to do so.
+:::

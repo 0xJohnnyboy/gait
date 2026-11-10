@@ -1,0 +1,21 @@
+---
+title: Performance
+description: Keep capture bounded and separate from rendering and transport.
+draft: false
+---
+
+Gait's hot path updates online accumulators and bounded state. It does not serialize JSON, call the network or cause a framework render for every native event.
+
+```ts
+const unsubscribe = gait.subscribe(renderSnapshot);
+const timer = window.setInterval(() => gait.flush(), 250);
+
+// cleanup
+window.clearInterval(timer);
+unsubscribe();
+gait.destroy();
+```
+
+Use a 200–500 ms cadence for a live dashboard and a slower cadence for background collection. A faster publication cadence increases UI work; it does not improve native event resolution.
+
+Performance changes require reproducible benchmarks with p95/p99 ingestion and flush latency, sustained pointer input, allocation measurements and framework render counts. Keep matching, persistence, encryption and network work outside the capture path.

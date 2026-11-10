@@ -1,0 +1,23 @@
+---
+title: Angular adapter
+description: Expose snapshots through a readonly Angular signal.
+draft: false
+---
+
+```bash
+pnpm add @gait/core @gait/angular @gait/browser
+```
+
+```ts
+import { DestroyRef, inject } from '@angular/core';
+import { GaitAdapter } from '@gait/angular';
+
+readonly destroyRef = inject(DestroyRef);
+readonly gait = new GaitAdapter();
+
+constructor() {
+  this.gait.start(clientGaitConfig, this.destroyRef);
+}
+```
+
+`GaitAdapter` schedules browser startup after the next render, updates its readonly `snapshot` signal on flush and destroys the Core instance through the supplied destroy scope.

@@ -1,0 +1,13 @@
+---
+title: Privacy and trust
+description: What gait captures, what it exposes and what it never claims.
+draft: false
+---
+
+Gait makes aggregate behavioral summaries available locally. It has no transport, persistence, account, IP or FingerprintJS integration.
+
+Keyboard content is not exposed. Internal key pairing uses a temporary key identifier, while snapshots expose only aggregate dwell/flight statistics and counters. Every signal has `eventsSeen`, `eventsAccepted` and `eventsRejected` for capture diagnostics.
+
+`quality.confidence` is a heuristic about capture quality. `isTrusted`, timestamp anomalies, gaps and sequence inconsistencies can degrade it, but none proves spoofing. The browser is controllable by page code, extensions and automation.
+
+The application consuming a snapshot owns consent, retention, access control, transport, correlation and any resulting product decision. Gait never sanctions, bans, matches or labels a user.

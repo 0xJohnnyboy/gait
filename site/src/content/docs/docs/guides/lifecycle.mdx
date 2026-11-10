@@ -1,0 +1,77 @@
+---
+title: Lifecycle
+description: Start, publish, stop and destroy a gait session safely.
+draft: false
+---
+
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
+The lifecycle is explicit:
+
+1. Create an instance.
+2. Subscribe to snapshots if the application needs publications.
+3. Call `start()` once the relevant client interaction begins.
+4. Call `flush()` on an application-owned cadence.
+5. Call `stop()` or `destroy()` when the session ends.
+
+`start()`, `stop()` and `destroy()` are safe to repeat. Do not reuse an instance after `destroy()`; create a new one for a new session.
+
+```ts
+const unsubscribe = gait.subscribe(renderOrQueueSnapshot);
+gait.start();
+const interval = window.setInterval(() => gait.flush(), 250);
+
+function dispose(): void {
+  window.clearInterval(interval);
+  unsubscribe();
+  gait.destroy();
+}
+```
+
+## Framework ownership
+
+The lifecycle operation is the same, but ownership belongs to the host framework:
+
+<Tabs syncKey="framework">
+  <TabItem label="Browser">
+
+```ts
+const gait = createBrowserGait();
+gait.start();
+const timer = window.setInterval(() => gait.flush(), 250);
+```
+
+  </TabItem>
+  <TabItem label="React">
+
+```tsx
+const gait = useGait({ ...config, autoStart: true });
+const snapshot = useGaitSnapshot(gait);
+```
+
+  </TabItem>
+  <TabItem label="Vue">
+
+```ts
+const { gait, snapshot } = useGait(clientGaitConfig);
+```
+
+  </TabItem>
+  <TabItem label="Svelte">
+
+```ts
+const snapshot = createGaitStore(clientGaitConfig);
+```
+
+  </TabItem>
+  <TabItem label="Angular">
+
+```ts
+const gait = new GaitAdapter();
+gait.start(clientGaitConfig, destroyRef);
+```
+
+  </TabItem>
+</Tabs>
+
+Framework adapters connect these operations to their own lifecycle. They never retain raw events or recalculate metrics.

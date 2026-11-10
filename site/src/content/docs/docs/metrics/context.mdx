@@ -1,0 +1,9 @@
+---
+title: Browser context
+description: Focus, visibility and lifecycle gaps around capture.
+draft: false
+---
+
+Context events describe whether the page was focused, blurred, visible, hidden, persisted by `pagehide` or restored by `pageshow`. They help consumers interpret gaps in keyboard and pointer observations.
+
+`focusMs` accumulates focused time, `blurCount` counts blur transitions and `visibilityGapMs` accumulates hidden intervals. These are context signals, not evidence of user intent.

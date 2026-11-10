@@ -1,0 +1,11 @@
+---
+title: Confidence and limits
+description: Interpret capture quality without treating it as proof.
+draft: false
+---
+
+`quality.confidence` contains a bounded `score`, a `low`/`medium`/`high` level and `degradationReasons`.
+
+Reasons can include `insufficient_sample`, `timestamp_anomaly`, `event_gap`, `synthetic_hint`, `visibility_gap` and `unsupported_signal`. They explain capture quality and why the score is degraded; they do not prove why a browser event was produced.
+
+The browser is controllable by page code, extensions and automation. A confidence score cannot establish that a human generated an event, that a device is unique or that two sessions belong to the same person. Use gait only as one signal in an application-owned correlation process.

@@ -1,0 +1,28 @@
+---
+title: Core API
+description: The public lifecycle and configuration contract.
+draft: false
+---
+
+## Factory
+
+```ts
+import { createGait } from '@gait/core';
+const gait = createGait(config);
+```
+
+Use `createGait()` with injected ports in tests and platform adapters. Use `createBrowserGait()` when you want the browser source and monotonic clock wired for you.
+
+## Methods
+
+| Method | Behavior |
+| --- | --- |
+| `start()` | Starts capture and installs the source once. |
+| `stop()` | Stops capture and releases active source listeners. |
+| `reset()` | Clears aggregates and begins a new measurement window. |
+| `snapshot()` | Returns the current snapshot without notifying subscribers. |
+| `flush()` | Builds and publishes a snapshot to subscribers. |
+| `subscribe(listener)` | Subscribes to explicit publications and returns an unsubscribe function. |
+| `destroy()` | Releases resources permanently. Do not reuse the instance. |
+
+There is no network, storage, JSON transport or user callback on the native event hot path.

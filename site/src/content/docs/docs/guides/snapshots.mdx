@@ -1,0 +1,20 @@
+---
+title: Read snapshots
+description: Understand publication, immutable summaries and missing observations.
+draft: false
+---
+
+`flush()` builds the current versioned snapshot and notifies subscribers. `snapshot()` reads the latest state and builds a snapshot if necessary; it does not publish to listeners.
+
+```ts
+const current = gait.snapshot();
+const published = gait.flush();
+
+console.log({
+  schema: published.schemaVersion,
+  dwell: published.signals.keyboard.dwellTimeMs?.mean,
+  confidence: published.quality.confidence,
+});
+```
+
+Treat snapshots as values. Copy or serialize them only at an application boundary. Gait does not serialize JSON or perform network work in the capture path.
