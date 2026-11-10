@@ -65,5 +65,6 @@ for (const packageName of packages) {
   const packageRoot = join(root, 'packages', packageName);
   runTsc(packageName, 'CommonJS', join(packageRoot, 'dist-cjs'));
   copyCjsFiles(join(packageRoot, 'dist-cjs'), join(packageRoot, 'dist'));
+  rmSync(join(packageRoot, 'dist-cjs'), { recursive: true, force: true });
 }
 rmSync(join(root, '.gait-build'), { recursive: true, force: true });
