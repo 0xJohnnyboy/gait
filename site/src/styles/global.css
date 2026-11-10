@@ -25,6 +25,13 @@ body { min-width: 320px; margin: 0; color: var(--ink); background: radial-gradie
 .docs-content h1 { margin-top: 1.25rem; color: white; font-family: var(--font-display); font-size: clamp(2.7rem, 7vw, 4.5rem); font-weight: 600; letter-spacing: -.055em; line-height: 1; }
 .docs-content h2 { margin-top: 2.75rem; color: white; font-family: var(--font-display); font-size: 1.5rem; font-weight: 600; }
 .docs-content p { margin-top: 1.5rem; color: #94a3b8; font-size: 1.08rem; line-height: 1.9; }
+.docs-content ul, .docs-content ol { margin: 1rem 0; padding-left: 1.35rem; color: #94a3b8; font-size: 1.02rem; line-height: 1.8; }
+.docs-content li + li { margin-top: .35rem; }
+.docs-content a { color: var(--cyan); text-decoration: underline; text-underline-offset: .2em; }
+.docs-content table { width: 100%; margin-top: 2rem; border-collapse: collapse; color: #94a3b8; font-size: .95rem; }
+.docs-content th, .docs-content td { border-bottom: 1px solid var(--line); padding: .75rem .65rem; text-align: left; vertical-align: top; }
+.docs-content th { color: white; font-weight: 650; }
+.docs-content blockquote { margin: 2rem 0; border-left: 2px solid var(--cyan); padding-left: 1rem; color: #94a3b8; }
 .docs-content pre { margin-top: 2.5rem; overflow-x: auto; border: 1px solid rgba(255,255,255,.1); border-radius: 1rem; background: rgba(0,0,0,.3); padding: 1.25rem; color: #b8fff5; font-size: .9rem; line-height: 1.8; }
 .docs-content code { color: #b8fff5; }
 .docs-callout { margin-top: 2.5rem; border: 1px solid rgba(82,229,208,.2); border-radius: 1rem; background: rgba(82,229,208,.06); padding: 1.25rem; color: #c9fff8; font-size: .9rem; line-height: 1.6; }
