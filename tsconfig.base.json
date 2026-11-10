@@ -12,6 +12,11 @@
     "verbatimModuleSyntax": true,
     "isolatedModules": true,
     "allowImportingTsExtensions": true,
+    "baseUrl": ".",
+    "ignoreDeprecations": "6.0",
+    "paths": {
+      "@gait/core": ["packages/core/src/index.ts"]
+    },
     "declaration": true,
     "noEmit": true,
     "skipLibCheck": true
