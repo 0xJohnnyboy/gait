@@ -16,9 +16,28 @@
 }
 
 :root[data-theme='light'] {
+  --sl-color-white: #172033;
+  --sl-color-gray-1: #243047;
+  --sl-color-gray-2: #34435b;
+  --sl-color-gray-3: #53627a;
+  --sl-color-gray-4: #8490a5;
+  --sl-color-gray-5: #cbd5e1;
+  --sl-color-gray-6: #e8edf4;
+  --sl-color-gray-7: #f5f7fb;
+  --sl-color-black: #ffffff;
   --sl-color-accent-low: #d7f8f2;
   --sl-color-accent: #087f75;
   --sl-color-accent-high: #075e58;
+  --sl-color-text: var(--sl-color-gray-2);
+  --sl-color-text-accent: var(--sl-color-accent);
+  --sl-color-text-invert: var(--sl-color-black);
+  --sl-color-bg: var(--sl-color-black);
+  --sl-color-bg-nav: var(--sl-color-gray-7);
+  --sl-color-bg-sidebar: var(--sl-color-bg);
+  --sl-color-bg-inline-code: var(--sl-color-gray-6);
+  --sl-color-hairline-light: var(--sl-color-gray-6);
+  --sl-color-hairline: var(--sl-color-gray-5);
+  --sl-color-hairline-shade: var(--sl-color-gray-6);
 }
 
 .sl-markdown-content pre {

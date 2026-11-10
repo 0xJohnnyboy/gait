@@ -12,11 +12,12 @@ export default defineConfig({
     starlight({
       title: 'gait',
       customCss: ['./src/styles/docs.css'],
+      expressiveCode: false,
       social: [{ icon: 'github', label: 'GitHub', href: 'https://github.com/0xJohnnyboy/gait' }],
       sidebar: [
         {
           label: 'Start here',
-          items: [{ label: 'Documentation', link: '/gait/docs/' }, { label: 'Quickstart', link: '/gait/docs/quickstart/' }],
+          items: [{ label: 'Documentation', link: '/docs/' }, { label: 'Quickstart', link: '/docs/quickstart/' }],
         },
         {
           label: 'Use gait',
@@ -37,9 +38,9 @@ export default defineConfig({
         {
           label: 'Deep dive',
           items: [
-            { label: 'Architecture', link: '/gait/docs/architecture/' },
-            { label: 'Performance', link: '/gait/docs/performance/' },
-            { label: 'Privacy & trust', link: '/gait/docs/privacy/' },
+            { label: 'Architecture', link: '/docs/architecture/' },
+            { label: 'Performance', link: '/docs/performance/' },
+            { label: 'Privacy & trust', link: '/docs/privacy/' },
           ],
         },
       ],
