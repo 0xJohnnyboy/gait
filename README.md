@@ -13,11 +13,11 @@ It does not send data, persist data, fingerprint users, match accounts, score ch
 ## Quick start
 
 ```bash
-pnpm add @gait/core @gait/browser
+pnpm add @gaitjs/core @gaitjs/browser
 ```
 
 ```ts
-import { createBrowserGait } from '@gait/browser';
+import { createBrowserGait } from '@gaitjs/browser';
 
 const gait = createBrowserGait();
 const unsubscribe = gait.subscribe((snapshot) => {
@@ -37,14 +37,14 @@ Snapshots are published on explicit `flush()` calls, so native input events neve
 
 ## Packages
 
-- `@gait/core` — pure TypeScript aggregation and injectable ports.
-- `@gait/browser` — DOM event normalization and a monotonic browser clock.
-- `@gait/react` — React lifecycle and external-store hooks.
-- `@gait/vue` — Vue lifecycle and shallow refs.
-- `@gait/svelte` — subscription-scoped readable store.
-- `@gait/angular` — Angular signal adapter.
-- `@gait/schema` — versioned snapshot schema.
-- `@gait/testing` — deterministic event source helpers.
+- `@gaitjs/core` — pure TypeScript aggregation and injectable ports.
+- `@gaitjs/browser` — DOM event normalization and a monotonic browser clock.
+- `@gaitjs/react` — React lifecycle and external-store hooks.
+- `@gaitjs/vue` — Vue lifecycle and shallow refs.
+- `@gaitjs/svelte` — subscription-scoped readable store.
+- `@gaitjs/angular` — Angular signal adapter.
+- `@gaitjs/schema` — versioned snapshot schema.
+- `@gaitjs/testing` — deterministic event source helpers.
 
 ## Documentation
 

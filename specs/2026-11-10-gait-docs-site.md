@@ -48,7 +48,7 @@ La landing page existante est jugée bonne et doit rester intacte. La documentat
 
 ### Out
 
-- Toute modification des packages `@gait/core`, `@gait/browser` ou des adapters.
+- Toute modification des packages `@gaitjs/core`, `@gaitjs/browser` ou des adapters.
 - Toute modification du contrat JSON ou des métriques.
 - Toute logique de matching, fingerprinting, sanction ou transport.
 

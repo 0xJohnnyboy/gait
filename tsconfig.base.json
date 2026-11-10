@@ -14,7 +14,7 @@
     "allowImportingTsExtensions": true,
     "baseUrl": ".",
     "paths": {
-      "@gait/core": ["packages/core/src/index.ts"]
+      "@gaitjs/core": ["packages/core/src/index.ts"]
     },
     "declaration": true,
     "noEmit": true,

@@ -7,7 +7,7 @@ draft: false
 `GaitConfig` is intentionally small. Use `signals` to disable a family, `clock` and `eventSource` for deterministic tests, and `onSnapshot` only for application-owned snapshot handling.
 
 ```ts
-import { createGait } from '@gait/core';
+import { createGait } from '@gaitjs/core';
 
 const gait = createGait({
   signals: { keyboard: true, pointer: true, touch: false, wheel: false, context: true },

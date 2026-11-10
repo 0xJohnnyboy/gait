@@ -1,6 +1,6 @@
 import { onMounted, onUnmounted, shallowRef } from 'vue';
-import { createGait } from '@gait/core';
-import type { Gait, GaitConfig, GaitSnapshot } from '@gait/core';
+import { createGait } from '@gaitjs/core';
+import type { Gait, GaitConfig, GaitSnapshot } from '@gaitjs/core';
 
 export function useGait(config?: GaitConfig): { readonly gait: { value: Gait | undefined }; readonly snapshot: { value: GaitSnapshot | undefined } } {
   const gait = shallowRef<Gait | undefined>(undefined);

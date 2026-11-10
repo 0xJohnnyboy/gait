@@ -38,9 +38,9 @@ Les métriques sont des éléments de corrélation parmi d’autres. Elles ne do
 ### In
 
 - Monorepo pnpm/Turborepo ou équivalent avec packages indépendants :
-  - `@gait/core` : types, collecte, agrégation, calculs, sérialisation.
-  - `@gait/react`, `@gait/vue`, `@gait/svelte`, `@gait/angular` : intégrations lifecycle et abonnement.
-  - `@gait/testing` : horloge, générateurs d’événements et fixtures de test.
+  - `@gaitjs/core` : types, collecte, agrégation, calculs, sérialisation.
+  - `@gaitjs/react`, `@gaitjs/vue`, `@gaitjs/svelte`, `@gaitjs/angular` : intégrations lifecycle et abonnement.
+  - `@gaitjs/testing` : horloge, générateurs d’événements et fixtures de test.
 - Distribution ESM et CommonJS, déclarations TypeScript, `strict: true`, tree-shaking.
 - Support navigateur moderne avec `PointerEvent`, `KeyboardEvent`, `performance.now()`, `queueMicrotask` et `requestIdleCallback` optionnel ; aucun accès DOM lors de l’import.
 - API de démarrage/arrêt, configuration des signaux, reset, snapshot et export JSON.
@@ -227,7 +227,7 @@ Le schéma est additif dans une même major version. Les champs absents indiquen
 
 ## 11. Critères d'acceptation
 
-- **AC-1 :** `@gait/core` se compile en TypeScript strict et fonctionne sans framework ni accès DOM lors de l’import.
+- **AC-1 :** `@gaitjs/core` se compile en TypeScript strict et fonctionne sans framework ni accès DOM lors de l’import.
 - **AC-2 :** l’API `start`, `stop`, `reset`, `snapshot`, `subscribe` et `destroy` est typée, documentée et idempotente selon le contrat.
 - **AC-3 :** les signaux clavier, pointeur, touch, wheel et contexte sont capturables séparément et désactivables par configuration.
 - **AC-4 :** dwell time, flight time, vitesse, accélération, overlaps et statistiques descriptives sont vérifiés par tests déterministes avec tolérance numérique documentée.

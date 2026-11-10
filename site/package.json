@@ -1,5 +1,5 @@
 {
-  "name": "@gait/site",
+  "name": "@gaitjs/site",
   "private": true,
   "type": "module",
   "scripts": {
@@ -11,8 +11,8 @@
   "dependencies": {
     "@astrojs/react": "^4.3.0",
     "@astrojs/starlight": "^0.36.0",
-    "@gait/browser": "workspace:*",
-    "@gait/core": "workspace:*",
+    "@gaitjs/browser": "workspace:*",
+    "@gaitjs/core": "workspace:*",
     "astro": "^5.15.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",

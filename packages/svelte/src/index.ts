@@ -1,6 +1,6 @@
 import { readable } from 'svelte/store';
-import { createGait } from '@gait/core';
-import type { GaitConfig, GaitSnapshot } from '@gait/core';
+import { createGait } from '@gaitjs/core';
+import type { GaitConfig, GaitSnapshot } from '@gaitjs/core';
 
 export function createGaitStore(config?: GaitConfig) {
   return readable<GaitSnapshot | undefined>(undefined, (set) => {

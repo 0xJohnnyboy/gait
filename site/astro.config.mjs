@@ -50,8 +50,8 @@ export default defineConfig({
     plugins: [tailwindcss()],
     resolve: {
       alias: {
-        '@gait/browser': fileURLToPath(new URL('../packages/browser/src/index.ts', import.meta.url)),
-        '@gait/core': fileURLToPath(new URL('../packages/core/src/index.ts', import.meta.url)),
+        '@gaitjs/browser': fileURLToPath(new URL('../packages/browser/src/index.ts', import.meta.url)),
+        '@gaitjs/core': fileURLToPath(new URL('../packages/core/src/index.ts', import.meta.url)),
       },
     },
   },

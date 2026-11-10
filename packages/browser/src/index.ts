@@ -1,5 +1,5 @@
-import { createGait } from '@gait/core';
-import type { EventSource, Gait, GaitConfig, MonotonicClock, NormalizedEvent } from '@gait/core';
+import { createGait } from '@gaitjs/core';
+import type { EventSource, Gait, GaitConfig, MonotonicClock, NormalizedEvent } from '@gaitjs/core';
 
 export interface BrowserEventSourceOptions {
   readonly target?: Window;

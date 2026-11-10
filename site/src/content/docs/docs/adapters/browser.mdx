@@ -5,13 +5,13 @@ draft: false
 ---
 
 ```bash
-pnpm add @gait/core @gait/browser
+pnpm add @gaitjs/core @gaitjs/browser
 ```
 
-`@gait/browser` listens to keyboard, pointer, focus, visibility and optional wheel events. It normalizes them for `@gait/core` and owns the monotonic browser clock.
+`@gaitjs/browser` listens to keyboard, pointer, focus, visibility and optional wheel events. It normalizes them for `@gaitjs/core` and owns the monotonic browser clock.
 
 ```ts
-import { createBrowserGait } from '@gait/browser';
+import { createBrowserGait } from '@gaitjs/browser';
 
 const gait = createBrowserGait({
   includeWheel: true,

@@ -1,6 +1,6 @@
 import { afterNextRender, inject, signal } from '@angular/core';
-import { createGait } from '@gait/core';
-import type { Gait, GaitConfig, GaitSnapshot } from '@gait/core';
+import { createGait } from '@gaitjs/core';
+import type { Gait, GaitConfig, GaitSnapshot } from '@gaitjs/core';
 
 export interface GaitDestroyScope {
   onDestroy(callback: () => void): void;

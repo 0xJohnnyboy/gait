@@ -5,12 +5,12 @@ draft: false
 ---
 
 ```bash
-pnpm add @gait/core @gait/angular @gait/browser
+pnpm add @gaitjs/core @gaitjs/angular @gaitjs/browser
 ```
 
 ```ts
 import { DestroyRef, inject } from '@angular/core';
-import { GaitAdapter } from '@gait/angular';
+import { GaitAdapter } from '@gaitjs/angular';
 
 readonly destroyRef = inject(DestroyRef);
 readonly gait = new GaitAdapter();

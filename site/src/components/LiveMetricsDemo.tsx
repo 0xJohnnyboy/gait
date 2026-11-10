@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Activity, Eye, Fingerprint, Gauge, MousePointer2, ShieldCheck, Timer, Zap } from 'lucide-react';
-import { createBrowserGait } from '@gait/browser';
-import type { GaitSnapshot } from '@gait/core';
+import { createBrowserGait } from '@gaitjs/browser';
+import type { GaitSnapshot } from '@gaitjs/core';
 
 const emptySnapshot: GaitSnapshot = {
   schemaVersion: '1.0', libraryVersion: '0.1.0', capturedAt: { durationMs: 0, startedAtMonotonicMs: 0 },

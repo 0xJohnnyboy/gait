@@ -11,13 +11,13 @@ import { Tabs, TabItem } from '@astrojs/starlight/components';
 Install the Core and the adapter for the environment you are integrating:
 
 ```bash
-pnpm add @gait/core @gait/browser
+pnpm add @gaitjs/core @gaitjs/browser
 ```
 
 The browser factory installs no listeners until `start()` is called. Snapshots are published when you explicitly call `flush()`.
 
 ```ts
-import { createBrowserGait } from '@gait/browser';
+import { createBrowserGait } from '@gaitjs/browser';
 
 const gait = createBrowserGait({
   signals: { keyboard: true, pointer: true, touch: true, wheel: true, context: true },
@@ -39,7 +39,7 @@ gait.destroy();
   <TabItem label="Browser">
 
 ```ts
-import { createBrowserGait } from '@gait/browser';
+import { createBrowserGait } from '@gaitjs/browser';
 const gait = createBrowserGait();
 gait.start();
 const snapshot = gait.flush();
@@ -50,7 +50,7 @@ gait.destroy();
   <TabItem label="React">
 
 ```tsx
-import { useGait, useGaitSnapshot } from '@gait/react';
+import { useGait, useGaitSnapshot } from '@gaitjs/react';
 
 export function Metrics({ config }: { config: GaitConfig }) {
   const gait = useGait({ ...config, autoStart: true });
@@ -64,7 +64,7 @@ export function Metrics({ config }: { config: GaitConfig }) {
 
 ```vue
 <script setup lang="ts">
-import { useGait } from '@gait/vue';
+import { useGait } from '@gaitjs/vue';
 const { snapshot } = useGait(clientGaitConfig);
 </script>
 
@@ -76,7 +76,7 @@ const { snapshot } = useGait(clientGaitConfig);
 
 ```svelte
 <script lang="ts">
-import { createGaitStore } from '@gait/svelte';
+import { createGaitStore } from '@gaitjs/svelte';
 const snapshot = createGaitStore(clientGaitConfig);
 </script>
 
@@ -87,7 +87,7 @@ const snapshot = createGaitStore(clientGaitConfig);
   <TabItem label="Angular">
 
 ```ts
-import { GaitAdapter } from '@gait/angular';
+import { GaitAdapter } from '@gaitjs/angular';
 
 readonly gait = new GaitAdapter();
 constructor() { this.gait.start(clientGaitConfig, this.destroyRef); }

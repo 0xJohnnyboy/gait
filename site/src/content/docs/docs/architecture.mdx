@@ -5,14 +5,14 @@ draft: false
 ---
 
 ```text
-DOM events ──> @gait/browser ── normalized events ──> @gait/core
+DOM events ──> @gaitjs/browser ── normalized events ──> @gaitjs/core
                                                         │
                                   explicit flush ───────┘
                                                         ▼
                                       versioned snapshot
 ```
 
-`@gait/core` is pure TypeScript. It knows only about normalized events, an injectable clock and an injectable event source. `@gait/browser` owns DOM listeners, event normalization, coalesced pointer events and browser capability detection.
+`@gaitjs/core` is pure TypeScript. It knows only about normalized events, an injectable clock and an injectable event source. `@gaitjs/browser` owns DOM listeners, event normalization, coalesced pointer events and browser capability detection.
 
 Framework packages only connect lifecycle and subscriptions:
 
