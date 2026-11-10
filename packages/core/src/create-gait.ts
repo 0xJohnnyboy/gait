@@ -11,6 +11,8 @@ import type {
   NormalizedEvent,
   PointerSnapshot,
   SnapshotListener,
+  TouchSnapshot,
+  WheelSnapshot,
 } from './types.ts';
 import { GaitDestroyedError } from './types.ts';
 
@@ -42,6 +44,9 @@ const emptyContext = (): ContextSnapshot => ({
   visibilityGapMs: 0,
 });
 
+const emptyTouch = (): TouchSnapshot => ({ eventsSeen: 0, eventsAccepted: 0, eventsRejected: 0, sampleCount: 0, distancePx: 0 });
+const emptyWheel = (): WheelSnapshot => ({ eventsSeen: 0, eventsAccepted: 0, eventsRejected: 0, deltaX: 0, deltaY: 0, deltaZ: 0, pixelCount: 0, lineCount: 0, pageCount: 0 });
+
 function confidenceFor(keyboard: KeyboardSnapshot, pointer: PointerSnapshot): CaptureConfidence {
   const reasons: CaptureConfidence['degradationReasons'][number][] = [];
   const samples = (keyboard.dwellTimeMs?.n ?? 0) + pointer.sampleCount;
@@ -65,6 +70,8 @@ export function createGait(config: GaitConfig = {}): Gait {
   const speedStats = new RunningStats();
   let keyboard = emptyKeyboard();
   let pointer = emptyPointer();
+  let touch = emptyTouch();
+  let wheel = emptyWheel();
   let context = emptyContext();
   let previousPointer: { x: number; y: number; timestamp: number; pointerId: number } | undefined;
   let lastKeyUp: number | undefined;
@@ -137,6 +144,33 @@ export function createGait(config: GaitConfig = {}): Gait {
       previousPointer = { x: event.x, y: event.y, timestamp: event.timestamp, pointerId: event.pointerId };
       return;
     }
+    if (event.kind === 'touch-move') {
+      touch = { ...touch, eventsSeen: touch.eventsSeen + 1 };
+      if (!event.trusted || !Number.isFinite(event.x) || !Number.isFinite(event.y)) {
+        touch = { ...touch, eventsRejected: touch.eventsRejected + 1 };
+        return;
+      }
+      touch = { ...touch, eventsAccepted: touch.eventsAccepted + 1, sampleCount: touch.sampleCount + 1 };
+      return;
+    }
+    if (event.kind === 'wheel') {
+      wheel = { ...wheel, eventsSeen: wheel.eventsSeen + 1 };
+      if (!event.trusted || ![event.deltaX, event.deltaY, event.deltaZ].every(Number.isFinite)) {
+        wheel = { ...wheel, eventsRejected: wheel.eventsRejected + 1 };
+        return;
+      }
+      wheel = {
+        ...wheel,
+        eventsAccepted: wheel.eventsAccepted + 1,
+        deltaX: wheel.deltaX + event.deltaX,
+        deltaY: wheel.deltaY + event.deltaY,
+        deltaZ: wheel.deltaZ + event.deltaZ,
+        pixelCount: wheel.pixelCount + (event.deltaMode === 0 ? 1 : 0),
+        lineCount: wheel.lineCount + (event.deltaMode === 1 ? 1 : 0),
+        pageCount: wheel.pageCount + (event.deltaMode === 2 ? 1 : 0),
+      };
+      return;
+    }
     if (event.kind === 'context') {
       context = { ...context, eventsSeen: context.eventsSeen + 1, eventsAccepted: context.eventsAccepted + 1 };
       if (event.event === 'blur') context = { ...context, blurCount: context.blurCount + 1 };
@@ -163,7 +197,7 @@ export function createGait(config: GaitConfig = {}): Gait {
       schemaVersion: '1.0',
       libraryVersion: LIBRARY_VERSION,
       capturedAt: { durationMs: Math.max(0, clock.now() - startedAt), startedAtMonotonicMs: startedAt },
-      signals: { keyboard: keyboardSnapshot, pointer: pointerSnapshot, context },
+      signals: { keyboard: keyboardSnapshot, pointer: pointerSnapshot, touch, wheel, context },
       quality: { confidence: confidenceFor(keyboardSnapshot, pointerSnapshot) },
     };
   };
@@ -194,6 +228,8 @@ export function createGait(config: GaitConfig = {}): Gait {
       speedStats.reset();
       keyboard = emptyKeyboard();
       pointer = emptyPointer();
+      touch = emptyTouch();
+      wheel = emptyWheel();
       context = emptyContext();
       previousPointer = undefined;
       lastKeyUp = undefined;

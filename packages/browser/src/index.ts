@@ -47,16 +47,16 @@ export function createBrowserEventSource(options: BrowserEventSourceOptions = {}
       const emitPointer = (event: PointerEvent): void => {
         const events = event.getCoalescedEvents?.() ?? [event];
         for (const point of events) {
-          emit?.({
-            kind: 'pointer-move',
-            pointerId: point.pointerId,
-            pointerType: point.pointerType === 'mouse' || point.pointerType === 'touch' || point.pointerType === 'pen' ? point.pointerType : 'unknown',
-            x: point.clientX,
-            y: point.clientY,
-            timestamp: timestamp(point),
-            trusted: trusted(point),
-          });
+          if (point.pointerType === 'touch') {
+            emit?.({ kind: 'touch-move', pointerId: point.pointerId, x: point.clientX, y: point.clientY, timestamp: timestamp(point), trusted: trusted(point) });
+          } else {
+            emit?.({ kind: 'pointer-move', pointerId: point.pointerId, pointerType: point.pointerType === 'mouse' || point.pointerType === 'pen' ? point.pointerType : 'unknown', x: point.clientX, y: point.clientY, timestamp: timestamp(point), trusted: trusted(point) });
+          }
         }
+      };
+      const emitWheel = (event: WheelEvent): void => {
+        const mode: 0 | 1 | 2 = event.deltaMode === 1 || event.deltaMode === 2 ? event.deltaMode : 0;
+        emit?.({ kind: 'wheel', timestamp: timestamp(event), deltaX: event.deltaX, deltaY: event.deltaY, deltaZ: event.deltaZ, deltaMode: mode, trusted: trusted(event) });
       };
       const emitContext = (event: 'focus' | 'blur' | 'visible' | 'hidden' | 'pagehide' | 'pageshow', source: Event): void => {
         emit?.({ kind: 'context', event, timestamp: timestamp(source) });
@@ -75,7 +75,7 @@ export function createBrowserEventSource(options: BrowserEventSourceOptions = {}
         target.addEventListener('touchmove', () => undefined, { signal, passive: true });
       }
       if (options.includeWheel) {
-        target.addEventListener('wheel', () => undefined, { signal, passive: true });
+        target.addEventListener('wheel', emitWheel, { signal, passive: true });
       }
     },
     stop(): void {

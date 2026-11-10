@@ -46,6 +46,23 @@ export type NormalizedEvent =
       readonly trusted: boolean;
     }
   | {
+      readonly kind: 'touch-move';
+      readonly timestamp: number;
+      readonly pointerId: number;
+      readonly x: number;
+      readonly y: number;
+      readonly trusted: boolean;
+    }
+  | {
+      readonly kind: 'wheel';
+      readonly timestamp: number;
+      readonly deltaX: number;
+      readonly deltaY: number;
+      readonly deltaZ: number;
+      readonly deltaMode: 0 | 1 | 2;
+      readonly trusted: boolean;
+    }
+  | {
       readonly kind: 'context';
       readonly timestamp: number;
       readonly event: 'focus' | 'blur' | 'visible' | 'hidden' | 'pagehide' | 'pageshow';
@@ -84,6 +101,26 @@ export interface PointerSnapshot {
   readonly speedPxPerMs?: MetricSummary;
 }
 
+export interface TouchSnapshot {
+  readonly eventsSeen: number;
+  readonly eventsAccepted: number;
+  readonly eventsRejected: number;
+  readonly sampleCount: number;
+  readonly distancePx: number;
+}
+
+export interface WheelSnapshot {
+  readonly eventsSeen: number;
+  readonly eventsAccepted: number;
+  readonly eventsRejected: number;
+  readonly deltaX: number;
+  readonly deltaY: number;
+  readonly deltaZ: number;
+  readonly pixelCount: number;
+  readonly lineCount: number;
+  readonly pageCount: number;
+}
+
 export interface ContextSnapshot {
   readonly eventsSeen: number;
   readonly eventsAccepted: number;
@@ -113,6 +150,8 @@ export interface GaitSnapshot {
   readonly signals: {
     readonly keyboard: KeyboardSnapshot;
     readonly pointer: PointerSnapshot;
+    readonly touch: TouchSnapshot;
+    readonly wheel: WheelSnapshot;
     readonly context: ContextSnapshot;
   };
   readonly quality: {
